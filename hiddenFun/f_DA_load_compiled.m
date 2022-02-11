@@ -7,6 +7,7 @@ f_DA_update_log(app,indicatorMsg);
 try
     file_loc_compiled = app.file_loc_compiled;
     load(file_loc_compiled,'ImData');
+    app.ImData = ImData;
     tryMsg = ['Loading Pre-Compiled File Successful'];
     f_DA_update_log(app,tryMsg);
 catch

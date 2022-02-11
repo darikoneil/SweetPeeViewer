@@ -27,16 +27,27 @@ cla(app.MCMC_Axes_3,'reset');
 v = app.SelectedCell.Value;
 SAMPLES = app.ImData.MCMC{v};
 
+if app.ImData.imParams.procFlags.useFissa
+    trace = app.ImData.imParams.fissa.AdcFF(v,:);
+else
+    trace = app.ImData.imParams.suite2p.AdcF(v,:);
+end
+
 %% Plot Raw & Mean Traces + Spikes
 
-plot(app.MCMC_Axes_1,app.ImData.TimeStamps,app.ImData.imParams.suite2p.AdcF(v,:),'LineWidth',2,'Color',[newcolors(1,:) 0.75]);
+plot(app.MCMC_Axes_1,app.ImData.TimeStamps,trace,'LineWidth',2,'Color',[newcolors(1,:) 0.75]);
 hold(app.MCMC_Axes_1,'on');
 plot(app.MCMC_Axes_1,app.ImData.TimeStamps,app.ImData.Decon(v,:),'LineWidth',2,'Color',[newcolors(2,:) 0.75]);
 hold(app.MCMC_Axes_1,'off');
 
 %Now plot spike underlay
 hold(app.MCMC_Axes_1,'on');
-MinF = min(app.ImData.imParams.suite2p.AdcF(v,:));
+if app.ImData.imParams.procFlags.useFissa
+    MinF = min(trace)-500;
+else
+    MinF = min(trace);
+end
+
 accSpikes = app.ImData.accSpikes{v};
 for i = 1:length(app.ImData.accSpikes{v})
     line(app.MCMC_Axes_1,[app.ImData.TimeStamps(accSpikes(i)) app.ImData.TimeStamps(accSpikes(i))],[0 MinF],'LineWidth',0.1,'Color',newcolors(3,:));

@@ -77,6 +77,11 @@ ylim(app.UIAxes,[min(ROI_contours.ypix{v})-25 max(ROI_contours.ypix{v})+25]);
 
 hold(app.UIAxes,'off');
 
+%% Neuropil
+
+if app.ImData.imParams.procFlags.useFissa
+    
+
 %% Stats
 app.SNREditField.Value = app.ImData.SNR(v);
 app.RadiusEditField.Value = app.ImData.imParams.suite2p.stat{v}.radius;

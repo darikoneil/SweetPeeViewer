@@ -57,8 +57,8 @@ end
 indicatorMsg = ['Beginning Import'];
 f_DA_update_log(app,indicatorMsg)
 
-    if(exist('f1'))
-        if(exist('f2'))
+    if(exist('f1','var'))
+        if(exist('f2','var'))
             [ImData] = f_DA_importProcessImages(app,procFlag,f1,f2);
         else
             [ImData] = f_DA_importProcessImages(app,procFlag,f1);

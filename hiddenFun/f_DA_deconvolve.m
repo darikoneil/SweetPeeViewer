@@ -24,8 +24,13 @@ params.p = p;
 params.f = fr;
 params.B = B;
 
-trace = app.ImData.imParams.suite2p.AdcF(v,:);
-trace = double(trace); %type check
+if app.ImData.imParams.procFlags.useFissa
+    trace = app.ImData.imParams.fissa.AdcFF(v,:);
+    trace = double(trace); %type check
+else
+    trace = app.ImData.imParams.suite2p.AdcF(v,:);
+    trace = double(trace); %type check
+end
 
 %% Deconv
 f_DA_update_log(app,'Starting MCMC');

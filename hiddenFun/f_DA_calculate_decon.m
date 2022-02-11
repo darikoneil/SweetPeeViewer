@@ -11,7 +11,7 @@ SAMPLES = app.ImData.MCMC{v};
 
 
 % taken from plot_continouos samples
-T = length(app.ImData.imParams.suite2p.AdcF(v,:));
+T = length(app.ImData.imParams.suite2p.AdcF(v,:)); %fissa length should always equal suite2p length so this checks out and is fine
 N = length(SAMPLES.ns);
 show_gamma = 1;
 P = SAMPLES.params;
@@ -36,8 +36,8 @@ elseif p == 2
     p2_continuous = log(max(gr))/Dt;
     tau_1 = -1/p1_continuous;                   %tau h - smaller (tau_d * tau_r)/(tau_d + tau_r)
     tau_2 = -1/p2_continuous;                   %tau decay - larger
-    G1 = spdiags(ones(T,1)*[-min(gr),1],[-1:0],T,T);
-    G2 = spdiags(ones(T,1)*[-max(gr),1],[-1:0],T,T);
+    G1 = spdiags(ones(T,1)*[-min(gr),1], [-1:0],T,T);
+    G2 = spdiags(ones(T,1)*[-max(gr),1], [-1:0],T,T);
     ge = G2\[1;zeros(T-1,1)];
 else
     error('This order of the AR process is currently not supported');
