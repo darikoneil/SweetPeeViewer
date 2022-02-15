@@ -12,8 +12,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
         LoadCompiled                   matlab.ui.control.Button
         LoadOptions                    matlab.ui.control.Button
         HiRasLabel                     matlab.ui.control.Label
-        v069Label                      matlab.ui.control.Label
-        Image                          matlab.ui.control.Image
+        v070Label                      matlab.ui.control.Label
         LogTextArea                    matlab.ui.control.TextArea
         Suite2PPath                    matlab.ui.control.EditField
         BrowseSuite2P                  matlab.ui.control.Button
@@ -50,6 +49,9 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
         XLimitLower                    matlab.ui.control.NumericEditField
         YLimitLower                    matlab.ui.control.NumericEditField
         YLimitUpper                    matlab.ui.control.NumericEditField
+        OverlayDropDown                matlab.ui.control.DropDown
+        Scaling                        matlab.ui.control.DropDown
+        CDMapDropDown                  matlab.ui.control.DropDown
         NeuronalROIs                   matlab.ui.control.UIAxes
         RemovedROIs                    matlab.ui.control.UIAxes
         CellSelected                   matlab.ui.control.UIAxes
@@ -82,11 +84,13 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
         MCMC_Axes_1                    matlab.ui.control.UIAxes
         MCMC_Axes_3                    matlab.ui.control.UIAxes
         VideoMask                      matlab.ui.container.Tab
-        PreprocessingTab               matlab.ui.container.Tab
-        ExportTab                      matlab.ui.container.Tab
+        Tab_3                          matlab.ui.container.Tab
+        Tab_2                          matlab.ui.container.Tab
         ROISelectionPanel              matlab.ui.container.Panel
         ROILabel                       matlab.ui.control.Label
         SelectedCell                   matlab.ui.control.Spinner
+        SaveButton                     matlab.ui.control.Button
+        AutosaveOnCloseCheckBox        matlab.ui.control.CheckBox
         TabGroup2                      matlab.ui.container.TabGroup
         SelectedROIDetails             matlab.ui.container.Tab
         CellProbabilityEditFieldLabel  matlab.ui.control.Label
@@ -101,18 +105,26 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
         FootprintEditFieldLabel        matlab.ui.control.Label
         CompactnessEditField           matlab.ui.control.NumericEditField
         CompactnessEditFieldLabel      matlab.ui.control.Label
-        SkewEditField_2Label           matlab.ui.control.Label
-        SkewEditField                  matlab.ui.control.NumericEditField
-        AspectEditField_2Label         matlab.ui.control.Label
-        AspectEditField                matlab.ui.control.NumericEditField
-        TotalPixelsEditFieldLabel      matlab.ui.control.Label
-        TotalPixelsEditField           matlab.ui.control.NumericEditField
         SomaPixelsEditFieldLabel       matlab.ui.control.Label
+        SkewEditField                  matlab.ui.control.NumericEditField
+        TotalPixelsEditFieldLabel      matlab.ui.control.Label
+        AspectEditField                matlab.ui.control.NumericEditField
+        AspectEditField_2Label         matlab.ui.control.Label
+        TotalPixelsEditField           matlab.ui.control.NumericEditField
+        SkewEditField_2Label           matlab.ui.control.Label
         SomaPixelsEditField            matlab.ui.control.NumericEditField
         Switch                         matlab.ui.control.Switch
+        NormSoma_EditLabel             matlab.ui.control.Label
+        NormTotal_EditLabel            matlab.ui.control.Label
+        NormTotal_EditField            matlab.ui.control.NumericEditField
+        NormSoma_EditField             matlab.ui.control.NumericEditField
+        SNRS2P_EditLabel               matlab.ui.control.Label
+        SNRS2P_EditField               matlab.ui.control.NumericEditField
+        NoiseStd_EditLabel             matlab.ui.control.Label
+        NoiseStd_EditField             matlab.ui.control.NumericEditField
         UIAxes                         matlab.ui.control.UIAxes
         Neuropil_Close                 matlab.ui.control.UIAxes
-        Tab2                           matlab.ui.container.Tab
+        Tab                            matlab.ui.container.Tab
     end
 
     
@@ -126,11 +138,14 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
           file_loc_compiled;
           file_loc_options;
           file_loc_suite2p;
+          file_path_suite2p
           file_loc_fissa;
           ImData=struct();
           plotTraceStyles=struct();
           limitTracePlot_X=0;
           limitTracePlot_Y=0;
+          suite2p_filename;  % Filename for saving
+          autosave;
     end
     
 
@@ -177,6 +192,11 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
         % Button pushed function: LoadCompiled
         function LoadCompiledButtonPushed(app, event)
             f_DA_load_compiled(app);
+            f_DA_plotTraceStyles_constructor(app);
+            f_DA_initialize_ROIs(app);
+            f_DA_update_trace_plots(app);
+            f_DA_update_ROIs(app);
+            f_DA_update_log(app,'READY TO PLAY 0w0')
         end
 
         % Button pushed function: LoadOptions
@@ -351,11 +371,9 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
 
         % Close request function: UIFigure
         function UIFigureCloseRequest(app, event)
-            % save
-            ImData = app.ImData;
-            f_DA_update_log(app,'Saving Files');
-            save('Ras_Broke_My_Gri_Gri.mat','ImData');
-            f_DA_update_log(app,'Save Completed');
+            if app.autosave
+                f_DA_saveFun(app);
+            end
             f_DA_update_log(app,'Goodbye');
             delete(app)
             
@@ -404,6 +422,48 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             end
             f_DA_update_log(app,'Finished All')
         end
+
+        % Value changed function: PlotTrace_dFdT_fissa_2
+        function PlotTrace_dFdT_fissa_2ValueChanged(app, event)
+            value = app.PlotTrace_dFdT_fissa_2.Value;
+            app.plotTraceStyles.Decon_suite2p=value;
+            f_DA_update_trace_plots(app)
+        end
+
+        % Button pushed function: SaveButton
+        function SaveButtonPushed(app, event)
+            f_DA_update_log(app,'Saving Files');
+            f_DA_saveFun(app);
+            f_DA_update_log(app,'Save Completed');
+        end
+
+        % Value changed function: AutosaveOnCloseCheckBox
+        function AutosaveOnCloseCheckBoxValueChanged(app, event)
+            value = app.AutosaveOnCloseCheckBox.Value;
+            app.autosave = value;
+            f_DA_update_log(app,'Autosave Change Handled')
+        end
+
+        % Value changed function: OverlayDropDown
+        function OverlayDropDownValueChanged(app, event)
+            value = app.OverlayDropDown.Value;
+            f_DA_overlay(app);
+            f_DA_update_log(app,'Changed Overlay')
+        end
+
+        % Value changed function: Scaling
+        function ScalingValueChanged(app, event)
+            value = app.Scaling.Value;
+            f_DA_overlay(app);
+            f_DA_update_log(app, 'Changed Scaling')
+        end
+
+        % Value changed function: CDMapDropDown
+        function CDMapDropDownValueChanged(app, event)
+            value = app.CDMapDropDown.Value;
+            f_DA_overlay(app)
+            f_DA_update_log(app, 'Changed Colormap')
+        end
     end
 
     % Component initialization
@@ -414,7 +474,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
 
             % Create UIFigure and hide until all components are created
             app.UIFigure = uifigure('Visible', 'off');
-            app.UIFigure.Position = [100 100 1820 1000];
+            app.UIFigure.Position = [1 1 1820 1000];
             app.UIFigure.Name = 'MATLAB App';
             app.UIFigure.CloseRequestFcn = createCallbackFcn(app, @UIFigureCloseRequest, true);
 
@@ -476,18 +536,13 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.HiRasLabel.Position = [64 94 118 45];
             app.HiRasLabel.Text = 'Hi Ras';
 
-            % Create v069Label
-            app.v069Label = uilabel(app.IOPanel);
-            app.v069Label.FontName = 'Arial';
-            app.v069Label.FontSize = 24;
-            app.v069Label.FontWeight = 'bold';
-            app.v069Label.Position = [81 69 66 30];
-            app.v069Label.Text = 'v0.69';
-
-            % Create Image
-            app.Image = uiimage(app.IOPanel);
-            app.Image.Position = [1621 18 161 161];
-            app.Image.ImageSource = 'DENMARK.jpg';
+            % Create v070Label
+            app.v070Label = uilabel(app.IOPanel);
+            app.v070Label.FontName = 'Arial';
+            app.v070Label.FontSize = 24;
+            app.v070Label.FontWeight = 'bold';
+            app.v070Label.Position = [81 69 66 30];
+            app.v070Label.Text = 'v0.70';
 
             % Create LogTextArea
             app.LogTextArea = uitextarea(app.IOPanel);
@@ -612,6 +667,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             % Create PlotTrace_dFoF_fissa
             app.PlotTrace_dFoF_fissa = uicheckbox(app.CalciumTracePlottingPanel);
             app.PlotTrace_dFoF_fissa.ValueChangedFcn = createCallbackFcn(app, @PlotTrace_dFoF_fissaValueChanged, true);
+            app.PlotTrace_dFoF_fissa.Visible = 'off';
             app.PlotTrace_dFoF_fissa.Text = 'Plot (F-Fo)/Fo';
             app.PlotTrace_dFoF_fissa.FontName = 'Arial';
             app.PlotTrace_dFoF_fissa.FontSize = 14;
@@ -626,6 +682,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
 
             % Create PlotTrace_dFdT_fissa_5
             app.PlotTrace_dFdT_fissa_5 = uicheckbox(app.CalciumTracePlottingPanel);
+            app.PlotTrace_dFdT_fissa_5.Visible = 'off';
             app.PlotTrace_dFdT_fissa_5.Text = 'Plot Spikes';
             app.PlotTrace_dFdT_fissa_5.FontName = 'Arial';
             app.PlotTrace_dFdT_fissa_5.FontSize = 14;
@@ -681,12 +738,14 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             % Create PlotTrace_dFoF_suite2p
             app.PlotTrace_dFoF_suite2p = uicheckbox(app.CalciumTracePlottingPanel);
             app.PlotTrace_dFoF_suite2p.ValueChangedFcn = createCallbackFcn(app, @PlotTrace_dFoF_suite2pValueChanged, true);
+            app.PlotTrace_dFoF_suite2p.Visible = 'off';
             app.PlotTrace_dFoF_suite2p.Text = 'Plot (F-Fo)/Fo';
             app.PlotTrace_dFoF_suite2p.FontSize = 14;
             app.PlotTrace_dFoF_suite2p.Position = [160 130 109 23];
 
             % Create PlotTrace_dFdT_fissa_2
             app.PlotTrace_dFdT_fissa_2 = uicheckbox(app.CalciumTracePlottingPanel);
+            app.PlotTrace_dFdT_fissa_2.ValueChangedFcn = createCallbackFcn(app, @PlotTrace_dFdT_fissa_2ValueChanged, true);
             app.PlotTrace_dFdT_fissa_2.Text = 'Plot Decon.';
             app.PlotTrace_dFdT_fissa_2.FontName = 'Arial';
             app.PlotTrace_dFdT_fissa_2.FontSize = 14;
@@ -694,6 +753,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
 
             % Create PlotTrace_dFdT_fissa_3
             app.PlotTrace_dFdT_fissa_3 = uicheckbox(app.CalciumTracePlottingPanel);
+            app.PlotTrace_dFdT_fissa_3.Visible = 'off';
             app.PlotTrace_dFdT_fissa_3.Text = 'Plot Spikes';
             app.PlotTrace_dFdT_fissa_3.FontName = 'Arial';
             app.PlotTrace_dFdT_fissa_3.FontSize = 14;
@@ -755,6 +815,28 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.YLimitUpper.FontSize = 14;
             app.YLimitUpper.Position = [145 7 40 22];
             app.YLimitUpper.Value = 1;
+
+            % Create OverlayDropDown
+            app.OverlayDropDown = uidropdown(app.ROIsTab);
+            app.OverlayDropDown.Items = {'No Overlay', 'Max Projection', 'Correlation Map', 'Mean Image', 'Enhanced Mean', 'Reference Image', 'VCorrelation'};
+            app.OverlayDropDown.ValueChangedFcn = createCallbackFcn(app, @OverlayDropDownValueChanged, true);
+            app.OverlayDropDown.FontName = 'Arial';
+            app.OverlayDropDown.Position = [1276 703 100 22];
+            app.OverlayDropDown.Value = 'No Overlay';
+
+            % Create Scaling
+            app.Scaling = uidropdown(app.ROIsTab);
+            app.Scaling.Items = {'direct', 'scaled'};
+            app.Scaling.ValueChangedFcn = createCallbackFcn(app, @ScalingValueChanged, true);
+            app.Scaling.Position = [1276 659 100 22];
+            app.Scaling.Value = 'direct';
+
+            % Create CDMapDropDown
+            app.CDMapDropDown = uidropdown(app.ROIsTab);
+            app.CDMapDropDown.Items = {'turbo', 'jet', 'parula', 'gray', ''};
+            app.CDMapDropDown.ValueChangedFcn = createCallbackFcn(app, @CDMapDropDownValueChanged, true);
+            app.CDMapDropDown.Position = [1276 617 100 22];
+            app.CDMapDropDown.Value = 'turbo';
 
             % Create NeuronalROIs
             app.NeuronalROIs = uiaxes(app.ROIsTab);
@@ -971,17 +1053,14 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             % Create VideoMask
             app.VideoMask = uitab(app.TabGroup);
             app.VideoMask.AutoResizeChildren = 'off';
-            app.VideoMask.Title = 'Video Mask';
 
-            % Create PreprocessingTab
-            app.PreprocessingTab = uitab(app.TabGroup);
-            app.PreprocessingTab.AutoResizeChildren = 'off';
-            app.PreprocessingTab.Title = 'Preprocessing';
+            % Create Tab_3
+            app.Tab_3 = uitab(app.TabGroup);
+            app.Tab_3.AutoResizeChildren = 'off';
 
-            % Create ExportTab
-            app.ExportTab = uitab(app.TabGroup);
-            app.ExportTab.AutoResizeChildren = 'off';
-            app.ExportTab.Title = 'Export';
+            % Create Tab_2
+            app.Tab_2 = uitab(app.TabGroup);
+            app.Tab_2.AutoResizeChildren = 'off';
 
             % Create ROISelectionPanel
             app.ROISelectionPanel = uipanel(app.UIFigure);
@@ -1011,6 +1090,18 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.SelectedCell.Position = [80 260 270 22];
             app.SelectedCell.Value = 1;
 
+            % Create SaveButton
+            app.SaveButton = uibutton(app.ROISelectionPanel, 'push');
+            app.SaveButton.ButtonPushedFcn = createCallbackFcn(app, @SaveButtonPushed, true);
+            app.SaveButton.Position = [133 149 100 22];
+            app.SaveButton.Text = 'Save';
+
+            % Create AutosaveOnCloseCheckBox
+            app.AutosaveOnCloseCheckBox = uicheckbox(app.ROISelectionPanel);
+            app.AutosaveOnCloseCheckBox.ValueChangedFcn = createCallbackFcn(app, @AutosaveOnCloseCheckBoxValueChanged, true);
+            app.AutosaveOnCloseCheckBox.Text = 'Autosave On Close';
+            app.AutosaveOnCloseCheckBox.Position = [143 185 125 22];
+
             % Create TabGroup2
             app.TabGroup2 = uitabgroup(app.UIFigure);
             app.TabGroup2.Position = [1430 350 375 437];
@@ -1024,7 +1115,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.CellProbabilityEditFieldLabel.HorizontalAlignment = 'right';
             app.CellProbabilityEditFieldLabel.FontName = 'Arial';
             app.CellProbabilityEditFieldLabel.FontSize = 14;
-            app.CellProbabilityEditFieldLabel.Position = [8 15 99 22];
+            app.CellProbabilityEditFieldLabel.Position = [8 64 99 22];
             app.CellProbabilityEditFieldLabel.Text = 'Cell Probability';
 
             % Create SNREditFieldLabel
@@ -1032,7 +1123,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.SNREditFieldLabel.HorizontalAlignment = 'right';
             app.SNREditFieldLabel.FontName = 'Arial';
             app.SNREditFieldLabel.FontSize = 14;
-            app.SNREditFieldLabel.Position = [8 165 35 22];
+            app.SNREditFieldLabel.Position = [8 214 35 22];
             app.SNREditFieldLabel.Text = 'SNR';
 
             % Create SNREditField
@@ -1041,14 +1132,14 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.SNREditField.Editable = 'off';
             app.SNREditField.FontName = 'Arial';
             app.SNREditField.FontSize = 14;
-            app.SNREditField.Position = [114 165 70 22];
+            app.SNREditField.Position = [114 214 70 22];
 
             % Create CellProbabilityEditField
             app.CellProbabilityEditField = uieditfield(app.SelectedROIDetails, 'numeric');
             app.CellProbabilityEditField.Editable = 'off';
             app.CellProbabilityEditField.FontName = 'Arial';
             app.CellProbabilityEditField.FontSize = 14;
-            app.CellProbabilityEditField.Position = [114 15 70 22];
+            app.CellProbabilityEditField.Position = [114 64 70 22];
 
             % Create RadiusEditField
             app.RadiusEditField = uieditfield(app.SelectedROIDetails, 'numeric');
@@ -1056,14 +1147,14 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.RadiusEditField.Editable = 'off';
             app.RadiusEditField.FontName = 'Arial';
             app.RadiusEditField.FontSize = 14;
-            app.RadiusEditField.Position = [114 135 70 22];
+            app.RadiusEditField.Position = [114 184 70 22];
 
             % Create RadiusEditFieldLabel
             app.RadiusEditFieldLabel = uilabel(app.SelectedROIDetails);
             app.RadiusEditFieldLabel.HorizontalAlignment = 'right';
             app.RadiusEditFieldLabel.FontName = 'Arial';
             app.RadiusEditFieldLabel.FontSize = 14;
-            app.RadiusEditFieldLabel.Position = [8 135 49 22];
+            app.RadiusEditFieldLabel.Position = [8 184 49 22];
             app.RadiusEditFieldLabel.Text = 'Radius';
 
             % Create SolidityEditField
@@ -1072,14 +1163,14 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.SolidityEditField.Editable = 'off';
             app.SolidityEditField.FontName = 'Arial';
             app.SolidityEditField.FontSize = 14;
-            app.SolidityEditField.Position = [114 105 70 22];
+            app.SolidityEditField.Position = [114 154 70 22];
 
             % Create SolidityLabel
             app.SolidityLabel = uilabel(app.SelectedROIDetails);
             app.SolidityLabel.HorizontalAlignment = 'right';
             app.SolidityLabel.FontName = 'Arial';
             app.SolidityLabel.FontSize = 14;
-            app.SolidityLabel.Position = [8 105 51 22];
+            app.SolidityLabel.Position = [8 154 51 22];
             app.SolidityLabel.Text = 'Solidity';
 
             % Create FootprintEditField
@@ -1088,14 +1179,14 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.FootprintEditField.Editable = 'off';
             app.FootprintEditField.FontName = 'Arial';
             app.FootprintEditField.FontSize = 14;
-            app.FootprintEditField.Position = [114 75 70 22];
+            app.FootprintEditField.Position = [114 124 70 22];
 
             % Create FootprintEditFieldLabel
             app.FootprintEditFieldLabel = uilabel(app.SelectedROIDetails);
             app.FootprintEditFieldLabel.HorizontalAlignment = 'right';
             app.FootprintEditFieldLabel.FontName = 'Arial';
             app.FootprintEditFieldLabel.FontSize = 14;
-            app.FootprintEditFieldLabel.Position = [8 75 61 22];
+            app.FootprintEditFieldLabel.Position = [8 124 61 22];
             app.FootprintEditFieldLabel.Text = 'Footprint';
 
             % Create CompactnessEditField
@@ -1104,75 +1195,75 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.CompactnessEditField.Editable = 'off';
             app.CompactnessEditField.FontName = 'Arial';
             app.CompactnessEditField.FontSize = 14;
-            app.CompactnessEditField.Position = [114 45 70 22];
+            app.CompactnessEditField.Position = [114 94 70 22];
 
             % Create CompactnessEditFieldLabel
             app.CompactnessEditFieldLabel = uilabel(app.SelectedROIDetails);
             app.CompactnessEditFieldLabel.HorizontalAlignment = 'right';
             app.CompactnessEditFieldLabel.FontName = 'Arial';
             app.CompactnessEditFieldLabel.FontSize = 14;
-            app.CompactnessEditFieldLabel.Position = [8 45 91 22];
+            app.CompactnessEditFieldLabel.Position = [8 94 91 22];
             app.CompactnessEditFieldLabel.Text = 'Compactness';
-
-            % Create SkewEditField_2Label
-            app.SkewEditField_2Label = uilabel(app.SelectedROIDetails);
-            app.SkewEditField_2Label.HorizontalAlignment = 'right';
-            app.SkewEditField_2Label.FontName = 'Arial';
-            app.SkewEditField_2Label.FontSize = 14;
-            app.SkewEditField_2Label.Position = [200 165 40 22];
-            app.SkewEditField_2Label.Text = 'Skew';
-
-            % Create SkewEditField
-            app.SkewEditField = uieditfield(app.SelectedROIDetails, 'numeric');
-            app.SkewEditField.Editable = 'off';
-            app.SkewEditField.FontName = 'Arial';
-            app.SkewEditField.FontSize = 14;
-            app.SkewEditField.Position = [290 165 70 22];
-
-            % Create AspectEditField_2Label
-            app.AspectEditField_2Label = uilabel(app.SelectedROIDetails);
-            app.AspectEditField_2Label.HorizontalAlignment = 'right';
-            app.AspectEditField_2Label.FontName = 'Arial';
-            app.AspectEditField_2Label.FontSize = 14;
-            app.AspectEditField_2Label.Position = [200 135 48 22];
-            app.AspectEditField_2Label.Text = 'Aspect';
-
-            % Create AspectEditField
-            app.AspectEditField = uieditfield(app.SelectedROIDetails, 'numeric');
-            app.AspectEditField.Editable = 'off';
-            app.AspectEditField.FontName = 'Arial';
-            app.AspectEditField.FontSize = 14;
-            app.AspectEditField.Position = [290 135 70 22];
-
-            % Create TotalPixelsEditFieldLabel
-            app.TotalPixelsEditFieldLabel = uilabel(app.SelectedROIDetails);
-            app.TotalPixelsEditFieldLabel.HorizontalAlignment = 'right';
-            app.TotalPixelsEditFieldLabel.FontName = 'Arial';
-            app.TotalPixelsEditFieldLabel.FontSize = 14;
-            app.TotalPixelsEditFieldLabel.Position = [200 105 76 22];
-            app.TotalPixelsEditFieldLabel.Text = 'Total Pixels';
-
-            % Create TotalPixelsEditField
-            app.TotalPixelsEditField = uieditfield(app.SelectedROIDetails, 'numeric');
-            app.TotalPixelsEditField.Editable = 'off';
-            app.TotalPixelsEditField.FontName = 'Arial';
-            app.TotalPixelsEditField.FontSize = 14;
-            app.TotalPixelsEditField.Position = [290 105 70 22];
 
             % Create SomaPixelsEditFieldLabel
             app.SomaPixelsEditFieldLabel = uilabel(app.SelectedROIDetails);
             app.SomaPixelsEditFieldLabel.HorizontalAlignment = 'right';
             app.SomaPixelsEditFieldLabel.FontName = 'Arial';
             app.SomaPixelsEditFieldLabel.FontSize = 14;
-            app.SomaPixelsEditFieldLabel.Position = [200 75 83 22];
+            app.SomaPixelsEditFieldLabel.Position = [200 118 83 22];
             app.SomaPixelsEditFieldLabel.Text = 'Soma Pixels';
+
+            % Create SkewEditField
+            app.SkewEditField = uieditfield(app.SelectedROIDetails, 'numeric');
+            app.SkewEditField.Editable = 'off';
+            app.SkewEditField.FontName = 'Arial';
+            app.SkewEditField.FontSize = 14;
+            app.SkewEditField.Position = [290 209 70 22];
+
+            % Create TotalPixelsEditFieldLabel
+            app.TotalPixelsEditFieldLabel = uilabel(app.SelectedROIDetails);
+            app.TotalPixelsEditFieldLabel.HorizontalAlignment = 'right';
+            app.TotalPixelsEditFieldLabel.FontName = 'Arial';
+            app.TotalPixelsEditFieldLabel.FontSize = 14;
+            app.TotalPixelsEditFieldLabel.Position = [200 148 76 22];
+            app.TotalPixelsEditFieldLabel.Text = 'Total Pixels';
+
+            % Create AspectEditField
+            app.AspectEditField = uieditfield(app.SelectedROIDetails, 'numeric');
+            app.AspectEditField.Editable = 'off';
+            app.AspectEditField.FontName = 'Arial';
+            app.AspectEditField.FontSize = 14;
+            app.AspectEditField.Position = [290 179 70 22];
+
+            % Create AspectEditField_2Label
+            app.AspectEditField_2Label = uilabel(app.SelectedROIDetails);
+            app.AspectEditField_2Label.HorizontalAlignment = 'right';
+            app.AspectEditField_2Label.FontName = 'Arial';
+            app.AspectEditField_2Label.FontSize = 14;
+            app.AspectEditField_2Label.Position = [200 178 48 22];
+            app.AspectEditField_2Label.Text = 'Aspect';
+
+            % Create TotalPixelsEditField
+            app.TotalPixelsEditField = uieditfield(app.SelectedROIDetails, 'numeric');
+            app.TotalPixelsEditField.Editable = 'off';
+            app.TotalPixelsEditField.FontName = 'Arial';
+            app.TotalPixelsEditField.FontSize = 14;
+            app.TotalPixelsEditField.Position = [290 149 70 22];
+
+            % Create SkewEditField_2Label
+            app.SkewEditField_2Label = uilabel(app.SelectedROIDetails);
+            app.SkewEditField_2Label.HorizontalAlignment = 'right';
+            app.SkewEditField_2Label.FontName = 'Arial';
+            app.SkewEditField_2Label.FontSize = 14;
+            app.SkewEditField_2Label.Position = [200 208 40 22];
+            app.SkewEditField_2Label.Text = 'Skew';
 
             % Create SomaPixelsEditField
             app.SomaPixelsEditField = uieditfield(app.SelectedROIDetails, 'numeric');
             app.SomaPixelsEditField.Editable = 'off';
             app.SomaPixelsEditField.FontName = 'Arial';
             app.SomaPixelsEditField.FontSize = 14;
-            app.SomaPixelsEditField.Position = [290 75 70 22];
+            app.SomaPixelsEditField.Position = [290 119 70 22];
 
             % Create Switch
             app.Switch = uiswitch(app.SelectedROIDetails, 'slider');
@@ -1182,6 +1273,66 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.Switch.FontSize = 14;
             app.Switch.Position = [260 30 45 20];
             app.Switch.Value = 'Neuron';
+
+            % Create NormSoma_EditLabel
+            app.NormSoma_EditLabel = uilabel(app.SelectedROIDetails);
+            app.NormSoma_EditLabel.HorizontalAlignment = 'right';
+            app.NormSoma_EditLabel.FontName = 'Arial';
+            app.NormSoma_EditLabel.FontSize = 14;
+            app.NormSoma_EditLabel.Position = [203 64 84 22];
+            app.NormSoma_EditLabel.Text = 'Norm. Soma';
+
+            % Create NormTotal_EditLabel
+            app.NormTotal_EditLabel = uilabel(app.SelectedROIDetails);
+            app.NormTotal_EditLabel.HorizontalAlignment = 'right';
+            app.NormTotal_EditLabel.FontName = 'Arial';
+            app.NormTotal_EditLabel.FontSize = 14;
+            app.NormTotal_EditLabel.Position = [207 94 73 22];
+            app.NormTotal_EditLabel.Text = 'Norm Total';
+
+            % Create NormTotal_EditField
+            app.NormTotal_EditField = uieditfield(app.SelectedROIDetails, 'numeric');
+            app.NormTotal_EditField.Editable = 'off';
+            app.NormTotal_EditField.FontName = 'Arial';
+            app.NormTotal_EditField.FontSize = 14;
+            app.NormTotal_EditField.Position = [294 95 70 22];
+
+            % Create NormSoma_EditField
+            app.NormSoma_EditField = uieditfield(app.SelectedROIDetails, 'numeric');
+            app.NormSoma_EditField.Editable = 'off';
+            app.NormSoma_EditField.FontName = 'Arial';
+            app.NormSoma_EditField.FontSize = 14;
+            app.NormSoma_EditField.Position = [294 65 70 22];
+
+            % Create SNRS2P_EditLabel
+            app.SNRS2P_EditLabel = uilabel(app.SelectedROIDetails);
+            app.SNRS2P_EditLabel.HorizontalAlignment = 'right';
+            app.SNRS2P_EditLabel.FontName = 'Arial';
+            app.SNRS2P_EditLabel.FontSize = 14;
+            app.SNRS2P_EditLabel.Position = [32 40 75 22];
+            app.SNRS2P_EditLabel.Text = 'SNR (S2P)';
+
+            % Create SNRS2P_EditField
+            app.SNRS2P_EditField = uieditfield(app.SelectedROIDetails, 'numeric');
+            app.SNRS2P_EditField.Editable = 'off';
+            app.SNRS2P_EditField.FontName = 'Arial';
+            app.SNRS2P_EditField.FontSize = 14;
+            app.SNRS2P_EditField.Position = [114 40 70 22];
+
+            % Create NoiseStd_EditLabel
+            app.NoiseStd_EditLabel = uilabel(app.SelectedROIDetails);
+            app.NoiseStd_EditLabel.HorizontalAlignment = 'right';
+            app.NoiseStd_EditLabel.FontName = 'Arial';
+            app.NoiseStd_EditLabel.FontSize = 14;
+            app.NoiseStd_EditLabel.Position = [31 13 76 22];
+            app.NoiseStd_EditLabel.Text = 'Noise (Std)';
+
+            % Create NoiseStd_EditField
+            app.NoiseStd_EditField = uieditfield(app.SelectedROIDetails, 'numeric');
+            app.NoiseStd_EditField.Editable = 'off';
+            app.NoiseStd_EditField.FontName = 'Arial';
+            app.NoiseStd_EditField.FontSize = 14;
+            app.NoiseStd_EditField.Position = [114 13 70 22];
 
             % Create UIAxes
             app.UIAxes = uiaxes(app.SelectedROIDetails);
@@ -1205,9 +1356,8 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.Neuropil_Close.Box = 'on';
             app.Neuropil_Close.Position = [200 238 152 152];
 
-            % Create Tab2
-            app.Tab2 = uitab(app.TabGroup2);
-            app.Tab2.Title = 'Tab2';
+            % Create Tab
+            app.Tab = uitab(app.TabGroup2);
 
             % Show the figure after all components are created
             app.UIFigure.Visible = 'on';
