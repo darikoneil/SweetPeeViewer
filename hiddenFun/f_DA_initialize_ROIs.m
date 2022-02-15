@@ -53,13 +53,13 @@ ROI_contours = app.ImData.neuronalROIs;
 ROI_bounds = app.ImData.ROI_bounds;
 
 % Plot them
-hold(app.RemovedROIs,'on');
+%hold(app.RemovedROIs,'on');
 
-for i = 1:length(ROI_contours.xpix)
-    fill(app.RemovedROIs,ROI_contours.xpix{i}(ROI_contours.boundaryOutlines{i}),ROI_contours.ypix{i}(ROI_contours.boundaryOutlines{i}),'w','FaceAlpha',0.25,'EdgeAlpha',0.25);
-end
+%for i = 1:length(ROI_contours.xpix)
+ %   fill(app.RemovedROIs,ROI_contours.xpix{i}(ROI_contours.boundaryOutlines{i}),ROI_contours.ypix{i}(ROI_contours.boundaryOutlines{i}),'w','FaceAlpha',0.25,'EdgeAlpha',0.25);
+%end
 
-hold(app.RemovedROIs,'off');
+%hold(app.RemovedROIs,'off');
 
 
 nROI_contours = app.ImData.removedROIs;

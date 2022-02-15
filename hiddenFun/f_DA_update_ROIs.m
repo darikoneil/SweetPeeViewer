@@ -81,6 +81,34 @@ hold(app.UIAxes,'off');
 
 if app.ImData.imParams.procFlags.useFissa
     
+else
+     cla(app.Neuropil_Close,'reset'); 
+     app.Neuropil_Close.XTickLabel=[];%clear axes
+     app.Neuropil_Close.YTickLabel=[];
+     app.Neuropil_Close.XTick=[];%clear ticks
+     app.Neuropil_Close.YTick=[];%clear ticks
+     app.Neuropil_Close.Title.String = 'Neuropil';
+     app.Neuropil_Close.Box = 'on';
+     hold(app.Neuropil_Close,'on');
+     for i = 1:length(ROI_contours.xpix)
+         fill(app.Neuropil_Close,ROI_contours.xpix{i}(ROI_contours.boundaryOutlines{i}),ROI_contours.ypix{i}(ROI_contours.boundaryOutlines{i}),'w','FaceAlpha',0.25,'EdgeAlpha',0.25);
+     end
+     
+     % Now plot the selected
+     v = app.SelectedCell.Value;
+     fill(app.Neuropil_Close,ROI_contours.xpix{v}(ROI_contours.boundaryOutlines{v}),ROI_contours.ypix{v}(ROI_contours.boundaryOutlines{v}),C(v,:),'FaceAlpha',0.25);
+     
+     xlim(app.Neuropil_Close,[min(ROI_contours.xpix{v})-25 max(ROI_contours.xpix{v})+25]);
+     ylim(app.Neuropil_Close,[min(ROI_contours.ypix{v})-25 max(ROI_contours.ypix{v})+25]);
+
+   
+    [X,Y] = f_DA_convertLinearIndexToMat(app.ImData.imParams.suite2p.fops.Lx,app.ImData.imParams.suite2p.stat{v}.neuropil_mask);
+    neuropilBoundaries = boundary(double(transpose(X)),double(transpose(Y)));
+    randC = randsample(length(ROI_contours), 1);
+    fill(app.Neuropil_Close,Y(neuropilBoundaries),X(neuropilBoundaries), randC, 'FaceAlpha',0.25);
+    hold(app.Neuropil_Close,'off');
+end
+
 
 %% Stats
 app.SNREditField.Value = app.ImData.SNR(v);
@@ -93,6 +121,10 @@ app.SkewEditField.Value = double(app.ImData.imParams.suite2p.stat{v}.skew);
 app.AspectEditField.Value = double(app.ImData.imParams.suite2p.stat{v}.aspect_ratio);
 app.TotalPixelsEditField.Value = double(app.ImData.imParams.suite2p.stat{v}.npix);
 app.SomaPixelsEditField.Value = double(app.ImData.imParams.suite2p.stat{v}.npix_soma);
+app.NormTotal_EditField.Value = double(app.ImData.imParams.suite2p.stat{v}.npix_norm_no_crop);
+app.NormSoma_EditField.Value = double(app.ImData.imParams.suite2p.stat{v}.npix_norm);
+app.NoiseStd_EditField.Value = double(app.ImData.imParams.suite2p.stat{v}.std);
+app.SNRS2P_EditField.Value = double(max(app.ImData.imParams.suite2p.AdcF(v,:)))/double(app.ImData.imParams.suite2p.stat{v}.std);
 
 %% Index
 
