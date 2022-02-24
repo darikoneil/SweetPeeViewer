@@ -15,3 +15,5 @@ Colormaps
 Scaling
 norm sizes, SNR, std
 
+Pushes:
+02/24/22 -> Fixed bug in overlays. Made some options not implemented un-editable
