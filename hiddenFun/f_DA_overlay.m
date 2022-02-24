@@ -4,7 +4,7 @@ function f_DA_overlay(app)
 
 CDataMapping = app.Scaling.Value;
 CDMap = app.CDMapDropDown.Value;
-if strcmp(app.OverlayDropDown.Value,'No Overlay');
+if strcmp(app.OverlayDropDown.Value,'No Overlay')
     f_DA_update_ROIs(app);
     f_DA_initialize_ROIs(app);
 else

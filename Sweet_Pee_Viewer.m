@@ -72,9 +72,10 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
         DtEditField                    matlab.ui.control.NumericEditField
         gEditField_2                   matlab.ui.control.NumericEditField
         RunButton                      matlab.ui.control.Button
-        MCMCCellEditFieldLabel         matlab.ui.control.Label
-        MCMCCellEditField              matlab.ui.control.NumericEditField
+        DisplayedCellEditFieldLabel    matlab.ui.control.Label
+        DisplayedCellEditField         matlab.ui.control.NumericEditField
         RunAllButton                   matlab.ui.control.Button
+        UpdateTauButton                matlab.ui.control.Button
         MCMC_X                         matlab.ui.control.CheckBox
         MCMC_Y                         matlab.ui.control.CheckBox
         MCMC_X_Min                     matlab.ui.control.NumericEditField
@@ -275,6 +276,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             value = app.SelectedCell.Value;
             f_DA_update_trace_plots(app);
             f_DA_update_ROIs(app);
+            f_DA_update_overlay(app);
             Msg = ['ROI ' num2str(value) ' Now Displayed'];
             f_DA_update_log(app,Msg);
         end
@@ -463,6 +465,18 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             value = app.CDMapDropDown.Value;
             f_DA_overlay(app)
             f_DA_update_log(app, 'Changed Colormap')
+        end
+
+        % Button pushed function: UpdateTauButton
+        function UpdateTauButtonPushed(app, event)
+            tau_r = app.RiseEditField.Value;
+            tau_d = app.DecayEditField.Value;
+            fr = app.ImData.fr;
+            dT = 1/(fr);
+            app.DtEditField.Value = dT;
+            [g,~] = tau_c2d(tau_r,tau_d,dT);
+            app.gEditField_2.Value = g(1);
+            app.gEditField.Value = g(2);
         end
     end
 
@@ -905,6 +919,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             % Create AROrderEditField
             app.AROrderEditField = uieditfield(app.MCMCTempPanel, 'numeric');
             app.AROrderEditField.Limits = [1 2];
+            app.AROrderEditField.Editable = 'off';
             app.AROrderEditField.Position = [80 336 100 22];
             app.AROrderEditField.Value = 2;
 
@@ -916,6 +931,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
 
             % Create gEditField
             app.gEditField = uieditfield(app.MCMCTempPanel, 'numeric');
+            app.gEditField.Editable = 'off';
             app.gEditField.Position = [136 303 44 22];
             app.gEditField.Value = Inf;
 
@@ -963,11 +979,13 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             % Create DtEditField
             app.DtEditField = uieditfield(app.MCMCTempPanel, 'numeric');
             app.DtEditField.Limits = [0 Inf];
+            app.DtEditField.Editable = 'off';
             app.DtEditField.Position = [80 154 100 22];
             app.DtEditField.Value = Inf;
 
             % Create gEditField_2
             app.gEditField_2 = uieditfield(app.MCMCTempPanel, 'numeric');
+            app.gEditField_2.Editable = 'off';
             app.gEditField_2.Position = [88 303 44 22];
             app.gEditField_2.Value = -Inf;
 
@@ -979,16 +997,17 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.RunButton.Position = [185 11 100 26];
             app.RunButton.Text = 'Run';
 
-            % Create MCMCCellEditFieldLabel
-            app.MCMCCellEditFieldLabel = uilabel(app.MCMCTempPanel);
-            app.MCMCCellEditFieldLabel.HorizontalAlignment = 'right';
-            app.MCMCCellEditFieldLabel.Position = [8 115 67 22];
-            app.MCMCCellEditFieldLabel.Text = 'MCMC Cell';
+            % Create DisplayedCellEditFieldLabel
+            app.DisplayedCellEditFieldLabel = uilabel(app.MCMCTempPanel);
+            app.DisplayedCellEditFieldLabel.HorizontalAlignment = 'right';
+            app.DisplayedCellEditFieldLabel.Position = [-7 115 82 22];
+            app.DisplayedCellEditFieldLabel.Text = 'Displayed Cell';
 
-            % Create MCMCCellEditField
-            app.MCMCCellEditField = uieditfield(app.MCMCTempPanel, 'numeric');
-            app.MCMCCellEditField.Limits = [0 Inf];
-            app.MCMCCellEditField.Position = [90 115 90 22];
+            % Create DisplayedCellEditField
+            app.DisplayedCellEditField = uieditfield(app.MCMCTempPanel, 'numeric');
+            app.DisplayedCellEditField.Limits = [0 Inf];
+            app.DisplayedCellEditField.Editable = 'off';
+            app.DisplayedCellEditField.Position = [90 115 90 22];
 
             % Create RunAllButton
             app.RunAllButton = uibutton(app.MCMCTempPanel, 'push');
@@ -997,6 +1016,14 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.RunAllButton.FontSize = 16;
             app.RunAllButton.Position = [293 11 100 26];
             app.RunAllButton.Text = 'Run All';
+
+            % Create UpdateTauButton
+            app.UpdateTauButton = uibutton(app.MCMCTempPanel, 'push');
+            app.UpdateTauButton.ButtonPushedFcn = createCallbackFcn(app, @UpdateTauButtonPushed, true);
+            app.UpdateTauButton.FontName = 'Arial';
+            app.UpdateTauButton.FontSize = 16;
+            app.UpdateTauButton.Position = [76 11 100 26];
+            app.UpdateTauButton.Text = 'Update Tau';
 
             % Create MCMC_X
             app.MCMC_X = uicheckbox(app.Deconvolution);
