@@ -10,7 +10,6 @@ if isequal(file_name,0)
    disp('User selected Cancel');
 else
    app.file_loc_compiled = fullfile(path,file_name);
-   disp(['User selected ', app.file_loc_compiled]);
    app.CompiledPath.Value = app.file_loc_compiled;
 end
 

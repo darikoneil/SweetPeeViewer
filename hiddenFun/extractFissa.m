@@ -1,4 +1,4 @@
-function [cF,nPil,rawF,rawPil] = extractFissa(result,raw,blockSize,offset,numComponents)
+function [cF,nPil,rawF,rawPil, Sep] = extractFissa(result,raw,sep,blockSize,offset,numComponents)
 
 %% Documentation Contents
 % Darik O'Neil 1-12-2022
@@ -59,6 +59,19 @@ for c = 1:numComponents
     rawPil{c}(a,(1+(S2-1)*blockSize):end)=raw{a,S2}(c+1,:);
     end
 end
+
+%unmatched
+Sep = cell(4,1);
+for c = 1:(numComponents)
+    Sep{c} = nan(S1,(blockSize*(S2-1)+offset));
+    for a = 1:S1
+        for b = 1:(S2-1)
+            Sep{c}(a,(1+((b-1)*blockSize)):(blockSize+((b-1)*blockSize)))=sep{a,b}(c+1,:);
+        end
+    Sep{c}(a,(1+(S2-1)*blockSize):end)=sep{a,S2}(c+1,:);
+    end
+end
+
 
 end
 

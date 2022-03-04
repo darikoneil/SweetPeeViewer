@@ -56,6 +56,7 @@ if plotTraceStyles.PlotdFdT_suite2p
            plot(app.TracePlot,app.ImData.TimeStamps,app.ImData.imParams.suite2p.dFdT(v,:),'LineWidth',2);
        catch
            app.ImData.imParams.suite2p.dFdT(v,:) = [0 diff(app.ImData.imParams.suite2p.AdcF(v,:))];
+           plot(app.TracePlot,app.ImData.TimeStamps,app.ImData.imParams.suite2p.dFdT(v,:),'LineWidth',2);
        end
        hold(app.TracePlot,'off')
 end
@@ -107,7 +108,9 @@ end
 
 if plotTraceStyles.PlotSep_fissa
        hold(app.TracePlot,'on');
-       %
+       for i = 1:app.ImData.imParams.fissa.nRegions
+           plot(app.TracePlot, app.ImData.TimeStamps, app.ImData.imParams.fissa.sep{i}(v,:), 'LineWidth', 2);
+       end
        hold(app.TracePlot,'off')
 end
 
@@ -120,14 +123,19 @@ if plotTraceStyles.PlotnPil_fissa
 end
 
 if plotTraceStyles.PlotdFdT_fissa
-   hold(app.TracePlot,'on');
-   %
-   hold(app.TracePlot,'off')
+       hold(app.TracePlot,'on');
+       try
+           plot(app.TracePlot,app.ImData.TimeStamps,app.ImData.imParams.fissa.dFdT(v,:),'LineWidth',2);
+       catch
+           app.ImData.imParams.fissa.dFdT(v,:) = [0 diff(app.ImData.imParams.fissa.AdcFF(v,:))];
+           plot(app.TracePlot,app.ImData.TimeStamps,app.ImData.imParams.fissa.dFdT(v,:),'LineWidth',2);
+       end
+       hold(app.TracePlot,'off')
 end
 
 if plotTraceStyles.dFoF_fissa
        hold(app.TracePlot,'on');
-       %
+       %%not implemented as of yet 01/25/2022
        hold(app.TracePlot,'off')
 end
 

@@ -264,13 +264,14 @@ end
 if imParams.procFlags.useFissa
     f_DA_update_log(app,'Looking at Fissa Data');
     %extract Fissa
-    [cFF, nPil, rawF, rawPil] = extractFissa(imParams.fissa.result,imParams.fissa.raw,imParams.fissa.blocksize,imParams.fissa.offset,imParams.fissa.nRegions);
+    [cFF, nPil, rawF, rawPil, Sep] = extractFissa(imParams.fissa.result,imParams.fissa.raw,imParams.fissa.sep, imParams.fissa.blocksize,imParams.fissa.offset,imParams.fissa.nRegions);
     %export
        
         imParams.fissa.cFF = cFF;
         imParams.fissa.nPil = nPil;
         imParams.fissa.rawF = rawF;
         imParams.fissa.rawPil = rawPil;
+        imParams.fissa.sep = Sep;
         %find SNR
         f_DA_update_log(app,'Finding SNR in Fissa Data');
         %tau = imParams.suite2p.fops.tau;

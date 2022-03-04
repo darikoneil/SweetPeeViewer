@@ -18,6 +18,7 @@ else
     ROI_contours = app.ImData.ROI_conoturs;
     ROI_bounds = app.ImData.ROI_bounds;
     C = jet(size(ROI_contours.xpix,2));
+    C=flipud(C);
     hold(app.CellSelected,'on');
     for i = 1:length(ROI_contours.xpix)
         fill(app.CellSelected,ROI_contours.xpix{i}(ROI_contours.boundaryOutlines{i}),ROI_contours.ypix{i}(ROI_contours.boundaryOutlines{i}),'w','FaceAlpha',0,'EdgeAlpha',0.25);
@@ -31,7 +32,11 @@ else
         image(app.CellSelected, app.ImData.imParams.suite2p.fops.max_proj,'CDataMapping',CDataMapping, 'AlphaData',0.5);
         colormap(app.CellSelected, CDMap);
     elseif strcmp(app.OverlayDropDown.Value, 'Correlation Map')
-        image(app.CellSelected, app.ImData.imParams.suite2p.fops.Vmap{1}, 'CDataMapping',CDataMapping,'AlphaData', 0.5);
+        if app.ImData.imParams.suite2p.fops.anatomical_only==1
+            image(app.CellSelected, app.ImData.imParams.suite2p.fops.Vmap, 'CDataMapping',CDataMapping,'AlphaData', 0.5)
+        else
+            image(app.CellSelected, app.ImData.imParams.suite2p.fops.Vmap{1}, 'CDataMapping',CDataMapping,'AlphaData', 0.5);
+        end
         colormap(app.CellSelected, CDMap);
     elseif strcmp(app.OverlayDropDown.Value, 'Mean Image')
         image(app.CellSelected, app.ImData.imParams.suite2p.fops.meanImg, 'CDataMapping',CDataMapping, 'AlphaData', 0.5);
@@ -50,12 +55,13 @@ else
     end
     
   hold(app.CellSelected,'off');
+  app.CellSelected.YDir='reverse';
   
   %% NEURONAL PART TWO
 
 CDataMapping = app.Scaling.Value;
 CDMap = app.CDMapDropDown.Value;
-if strcmp(app.OverlayDropDown.Value,'No Overlay');
+if strcmp(app.OverlayDropDown.Value,'No Overlay')
     f_DA_update_ROIs(app);
     f_DA_initialize_ROIs(app);
 else
@@ -72,6 +78,7 @@ ROI_contours = app.ImData.neuronalROIs;
 ROI_bounds = app.ImData.ROI_bounds;
 % Make Colors
 C = jet(size(ROI_contours.xpix,2));
+C=flipud(C);
 
 % Plot them
 hold(app.NeuronalROIs,'on');
@@ -88,7 +95,11 @@ ylim(app.NeuronalROIs,[0 ROI_bounds(2)]);
         image(app.NeuronalROIs, app.ImData.imParams.suite2p.fops.max_proj,'CDataMapping',CDataMapping, 'AlphaData',0.5);
         colormap(app.NeuronalROIs, CDMap);
     elseif strcmp(app.OverlayDropDown.Value, 'Correlation Map')
-        image(app.NeuronalROIs, app.ImData.imParams.suite2p.fops.Vmap{1}, 'CDataMapping',CDataMapping,'AlphaData', 0.5);
+        if app.ImData.imParams.suite2p.fops.anatomical_only==1
+            image(app.NeuronalROIs, app.ImData.imParams.suite2p.fops.Vmap, 'CDataMapping',CDataMapping,'AlphaData', 0.5);
+        else
+            image(app.NeuronalROIs, app.ImData.imParams.suite2p.fops.Vmap{1}, 'CDataMapping',CDataMapping,'AlphaData', 0.5);
+        end
         colormap(app.NeuronalROIs, CDMap);
     elseif strcmp(app.OverlayDropDown.Value, 'Mean Image')
         image(app.NeuronalROIs, app.ImData.imParams.suite2p.fops.meanImg, 'CDataMapping',CDataMapping, 'AlphaData', 0.5);
@@ -107,7 +118,7 @@ ylim(app.NeuronalROIs,[0 ROI_bounds(2)]);
     end
 end
   hold(app.NeuronalROIs,'off');
-  
+  app.NeuronalROIs.YDir = 'reverse';
    %% NON-NEURONAL PART THREE
    
    CDataMapping = app.Scaling.Value;
@@ -130,6 +141,7 @@ end
        nROI_bounds = app.ImData.ROI_bounds;
        % Make Colors
        C = jet(size(nROI_contours.xpix,2));
+       C=flipud(C);
        % Plot them
        hold(app.RemovedROIs,'on');
        for i = 1:length(nROI_contours.xpix)
@@ -142,7 +154,11 @@ end
         image(app.RemovedROIs, app.ImData.imParams.suite2p.fops.max_proj,'CDataMapping',CDataMapping, 'AlphaData',0.5);
         colormap(app.RemovedROIs, CDMap);
         elseif strcmp(app.OverlayDropDown.Value, 'Correlation Map')
-        image(app.RemovedROIs, app.ImData.imParams.suite2p.fops.Vmap{1}, 'CDataMapping',CDataMapping,'AlphaData', 0.5);
+           if app.ImData.imParams.suite2p.fops.anatomical_only==1
+                image(app.RemovedROIs, app.ImData.imParams.suite2p.fops.Vmap, 'CDataMapping',CDataMapping,'AlphaData', 0.5);
+           else
+                image(app.RemovedROIs, app.ImData.imParams.suite2p.fops.Vmap{1}, 'CDataMapping',CDataMapping,'AlphaData', 0.5);
+           end
         colormap(app.RemovedROIs, CDMap);
         elseif strcmp(app.OverlayDropDown.Value, 'Mean Image')
         image(app.RemovedROIs, app.ImData.imParams.suite2p.fops.meanImg, 'CDataMapping',CDataMapping, 'AlphaData', 0.5);
@@ -162,6 +178,7 @@ end
 end
 
 hold(app.RemovedROIs,'off');
+app.RemovedROIs.YDir = 'reverse';
 
   %% CLOSE-UP
   
@@ -182,6 +199,7 @@ hold(app.RemovedROIs,'off');
        ROI_bounds = app.ImData.ROI_bounds;
        % Make Colors
        C = jet(size(ROI_contours.xpix,2));
+       C=flipud(C);
        hold(app.UIAxes,'on');
        for i = 1:length(ROI_contours.xpix)
            fill(app.UIAxes,ROI_contours.xpix{i}(ROI_contours.boundaryOutlines{i}),ROI_contours.ypix{i}(ROI_contours.boundaryOutlines{i}),'w','FaceAlpha',0,'EdgeAlpha',0.25);
@@ -196,7 +214,11 @@ hold(app.RemovedROIs,'off');
         image(app.UIAxes, app.ImData.imParams.suite2p.fops.max_proj,'CDataMapping',CDataMapping, 'AlphaData',0.5);
         colormap(app.UIAxes, CDMap);
         elseif strcmp(app.OverlayDropDown.Value, 'Correlation Map')
-        image(app.UIAxes, app.ImData.imParams.suite2p.fops.Vmap{1}, 'CDataMapping',CDataMapping,'AlphaData', 0.5);
+            if app.ImData.imParams.suite2p.fops.anatomical_only==1
+                image(app.UIAxes, app.ImData.imParams.suite2p.fops.Vmap, 'CDataMapping',CDataMapping,'AlphaData', 0.5);
+            else
+                image(app.UIAxes, app.ImData.imParams.suite2p.fops.Vmap{1}, 'CDataMapping',CDataMapping,'AlphaData', 0.5);
+            end
         colormap(app.UIAxes, CDMap);
         elseif strcmp(app.OverlayDropDown.Value, 'Mean Image')
         image(app.UIAxes, app.ImData.imParams.suite2p.fops.meanImg, 'CDataMapping',CDataMapping, 'AlphaData', 0.5);
@@ -215,7 +237,7 @@ hold(app.RemovedROIs,'off');
         end
    end
         hold(app.UIAxes,'off')
-        
+        app.UIAxes.YDir='reverse';
         
          %% NEUROPIL
   
@@ -225,37 +247,73 @@ hold(app.RemovedROIs,'off');
        f_DA_update_ROIs(app);
        f_DA_initialize_ROIs(app);
    else
-       cla(app.Neuropil_Close,'reset');app.CellSelected.YTickLabel=[];%clear axes
-       app.Neuropil_Close.XTickLabel=[];%clear axes
-       app.Neuropil_Close.XTick=[];%clear ticks
-       app.Neuropil_Close.YTick=[];%clear ticks
-       app.Neuropil_Close.Title.String = 'Neuropil'; %Set Title
-       app.Neuropil_Close.Box = 'on';
-       % Grab
-       ROI_contours = app.ImData.ROI_conoturs;
-       ROI_bounds = app.ImData.ROI_bounds;
-       % Make Colors
-       C = jet(size(ROI_contours.xpix,2));
-       hold(app.Neuropil_Close,'on');
-       for i = 1:length(ROI_contours.xpix)
-           fill(app.Neuropil_Close,ROI_contours.xpix{i}(ROI_contours.boundaryOutlines{i}),ROI_contours.ypix{i}(ROI_contours.boundaryOutlines{i}),'w','FaceAlpha',0,'EdgeAlpha',0.25);
-       end
-       % Now plot the selected
-       v = app.SelectedCell.Value;
-       fill(app.Neuropil_Close,ROI_contours.xpix{v}(ROI_contours.boundaryOutlines{v}),ROI_contours.ypix{v}(ROI_contours.boundaryOutlines{v}),C(v,:),'FaceAlpha',0,'EdgeAlpha',1,'LineJoin','round','LineWidth',2);
-       xlim(app.Neuropil_Close,[min(ROI_contours.xpix{v})-25 max(ROI_contours.xpix{v})+25]);
-       ylim(app.Neuropil_Close,[min(ROI_contours.ypix{v})-25 max(ROI_contours.ypix{v})+25]);
+       if app.ImData.imParams.procFlags.useFissa
+            cla(app.Neuropil_Close,'reset'); 
+            app.Neuropil_Close.XTickLabel=[];%clear axes
+            app.Neuropil_Close.YTickLabel=[];
+            app.Neuropil_Close.XTick=[];%clear ticks
+            app.Neuropil_Close.YTick=[];%clear ticks
+            app.Neuropil_Close.Title.String = 'Neuropil';    
+            app.Neuropil_Close.Box = 'on';
+            hold(app.Neuropil_Close,'on');
+     
+            for i = 1:length(ROI_contours.xpix)
+                fill(app.Neuropil_Close,ROI_contours.xpix{i}(ROI_contours.boundaryOutlines{i}),ROI_contours.ypix{i}(ROI_contours.boundaryOutlines{i}),'w','FaceAlpha',0.25,'EdgeAlpha',0.25);
+            end
+     
+            v = app.SelectedCell.Value;
+            fill(app.Neuropil_Close,ROI_contours.xpix{v}(ROI_contours.boundaryOutlines{v}),ROI_contours.ypix{v}(ROI_contours.boundaryOutlines{v}),C(v,:),'FaceAlpha',0,'EdgeAlpha',1,'LineJoin','round','LineWidth',2);
+     
+            xlim(app.Neuropil_Close,[min(ROI_contours.xpix{v})-25 max(ROI_contours.xpix{v})+25]);
+            ylim(app.Neuropil_Close,[min(ROI_contours.ypix{v})-25 max(ROI_contours.ypix{v})+25]);
+     
+            nPilROIs = f_DA_findNeuropilROIs(app.ImData.imParams.fissa.roi_polys);
+            for i = 1:app.ImData.imParams.fissa.nRegions
+                tmpROI = nPilROIs{v,1+i};
+                for j = 1:length(tmpROI)
+                    randC = randsample(length(ROI_contours), 1);
+                    b= boundary(tmpROI(:,1),tmpROI(:,2));
+                    fill(app.Neuropil_Close, tmpROI(b,1), tmpROI(b,2), C(randC,:), 'FaceAlpha',0,'EdgeAlpha',1,'LineJoin','round','LineWidth',2);
+                end
+            end
+       else
+           cla(app.Neuropil_Close,'reset');app.CellSelected.YTickLabel=[];%clear axes
+           app.Neuropil_Close.XTickLabel=[];%clear axes
+           app.Neuropil_Close.XTick=[];%clear ticks
+           app.Neuropil_Close.YTick=[];%clear ticks
+           app.Neuropil_Close.Title.String = 'Neuropil'; %Set Title
+           app.Neuropil_Close.Box = 'on';
+           % Grab
+           ROI_contours = app.ImData.ROI_conoturs;
+           ROI_bounds = app.ImData.ROI_bounds;
+           % Make Colors
+           C = jet(size(ROI_contours.xpix,2));
+           C=flipud(C);
+           hold(app.Neuropil_Close,'on');
+           for i = 1:length(ROI_contours.xpix)
+               fill(app.Neuropil_Close,ROI_contours.xpix{i}(ROI_contours.boundaryOutlines{i}),ROI_contours.ypix{i}(ROI_contours.boundaryOutlines{i}),'w','FaceAlpha',0,'EdgeAlpha',0.25);
+           end
+           % Now plot the selected
+           v = app.SelectedCell.Value;
+           fill(app.Neuropil_Close,ROI_contours.xpix{v}(ROI_contours.boundaryOutlines{v}),ROI_contours.ypix{v}(ROI_contours.boundaryOutlines{v}),C(v,:),'FaceAlpha',0,'EdgeAlpha',1,'LineJoin','round','LineWidth',2);
+           xlim(app.Neuropil_Close,[min(ROI_contours.xpix{v})-25 max(ROI_contours.xpix{v})+25]);
+          ylim(app.Neuropil_Close,[min(ROI_contours.ypix{v})-25 max(ROI_contours.ypix{v})+25]);
 
-        [X,Y] = f_DA_convertLinearIndexToMat(app.ImData.imParams.suite2p.fops.Lx,app.ImData.imParams.suite2p.stat{v}.neuropil_mask);
-        neuropilBoundaries = boundary(double(transpose(X)),double(transpose(Y)));
-        randC = randsample(length(ROI_contours), 1);
-        fill(app.Neuropil_Close,Y(neuropilBoundaries),X(neuropilBoundaries), randC, 'FaceAlpha',0, 'EdgeAlpha',1, 'LineJoin','round','LineWidth',2);
-    
+          [X,Y] = f_DA_convertLinearIndexToMat(app.ImData.imParams.suite2p.fops.Lx,app.ImData.imParams.suite2p.stat{v}.neuropil_mask);
+          neuropilBoundaries = boundary(double(transpose(X)),double(transpose(Y)));
+          randC = randsample(length(ROI_contours), 1);
+          fill(app.Neuropil_Close,Y(neuropilBoundaries),X(neuropilBoundaries), randC, 'FaceAlpha',0, 'EdgeAlpha',1, 'LineJoin','round','LineWidth',2);
+       end
+       
         if strcmp(app.OverlayDropDown.Value,'Max Projection')
         image(app.Neuropil_Close, app.ImData.imParams.suite2p.fops.max_proj,'CDataMapping',CDataMapping, 'AlphaData',0.5);
         colormap(app.Neuropil_Close, CDMap);
         elseif strcmp(app.OverlayDropDown.Value, 'Correlation Map')
-        image(app.Neuropil_Close, app.ImData.imParams.suite2p.fops.Vmap{1}, 'CDataMapping',CDataMapping,'AlphaData', 0.5);
+            if app.ImData.imParams.suite2p.fops.anatomical_only==1
+                image(app.Neuropil_Close, app.ImData.imParams.suite2p.fops.Vmap, 'CDataMapping',CDataMapping,'AlphaData', 0.5);
+            else
+                image(app.Neuropil_Close, app.ImData.imParams.suite2p.fops.Vmap{1}, 'CDataMapping',CDataMapping,'AlphaData', 0.5);
+            end
         colormap(app.Neuropil_Close, CDMap);
         elseif strcmp(app.OverlayDropDown.Value, 'Mean Image')
         image(app.Neuropil_Close, app.ImData.imParams.suite2p.fops.meanImg, 'CDataMapping',CDataMapping, 'AlphaData', 0.5);
@@ -274,6 +332,8 @@ hold(app.RemovedROIs,'off');
         end
    end
         hold(app.Neuropil_Close,'off')
+        
+        app.Neuropil_Close.YDir='reverse';
         
        
 end

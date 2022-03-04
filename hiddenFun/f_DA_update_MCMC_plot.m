@@ -95,4 +95,4 @@ imagesc(app.MCMC_Axes_3,app.ImData.TimeStamps, length(SAMPLES.ns),samples_cell2m
  %app.MCMC_Axes_1.ColorOrder=newcolors;
  colormap(app.MCMC_Axes_3,'turbo');
  
- app.MCMCCellEditField.Value=v;
+ app.DisplayedCellEditField.Value=v;

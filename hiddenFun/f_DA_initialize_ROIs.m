@@ -25,6 +25,7 @@ ROI_contours = app.ImData.neuronalROIs;
 ROI_bounds = app.ImData.ROI_bounds;
 % Make Colors
 C = jet(size(ROI_contours.xpix,2));
+C = flipud(C);
 
 % Plot them
 hold(app.NeuronalROIs,'on');
@@ -37,6 +38,7 @@ xlim(app.NeuronalROIs,[0 ROI_bounds(1)]);
 ylim(app.NeuronalROIs,[0 ROI_bounds(2)]);
 
 hold(app.NeuronalROIs,'off');
+app.NeuronalROIs.YDir='reverse';
 
 %% Non-Neuronal ROIs
 
@@ -67,6 +69,7 @@ nROI_bounds = app.ImData.ROI_bounds;
 
 % Make Colors
 C = jet(size(nROI_contours.xpix,2));
+C=flipud(C);
 
 % Plot them
 hold(app.RemovedROIs,'on');
@@ -79,4 +82,5 @@ xlim(app.RemovedROIs,[0 nROI_bounds(1)]);
 ylim(app.RemovedROIs,[0 nROI_bounds(2)]);
 
 hold(app.RemovedROIs,'off');
+app.RemovedROIs.YDir = 'reverse';
 end

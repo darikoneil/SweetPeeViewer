@@ -1,4 +1,4 @@
-function [nPilROIs] = findNeuropilROIs(roi_polys)
+function [ROIfixed] = f_DA_findNeuropilROIs(roi_polys)
 % Function to find ROI POLYS
 
 ROIs = roi_polys(:,1);
@@ -40,9 +40,6 @@ for i = 1:length(ROIs)
             end
         end
     end
-    fprintf('\n');
-    fprintf(num2str(i));
-    fprintf('\n');
 end
 end
 
