@@ -2,140 +2,176 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
 
     % Properties that correspond to app components
     properties (Access = public)
-        UIFigure                       matlab.ui.Figure
-        IOPanel                        matlab.ui.container.Panel
-        CompiledPath                   matlab.ui.control.EditField
-        OptionsPath                    matlab.ui.control.EditField
-        LoggingConsoleLabel            matlab.ui.control.Label
-        BrowseCompiled                 matlab.ui.control.Button
-        BrowseOptions                  matlab.ui.control.Button
-        LoadCompiled                   matlab.ui.control.Button
-        LoadOptions                    matlab.ui.control.Button
-        HiRasLabel                     matlab.ui.control.Label
-        v082Label                      matlab.ui.control.Label
-        LogTextArea                    matlab.ui.control.TextArea
-        Suite2PPath                    matlab.ui.control.EditField
-        BrowseSuite2P                  matlab.ui.control.Button
-        ImportImaging                  matlab.ui.control.Button
-        FIssaPath                      matlab.ui.control.EditField
-        BrowseFissa                    matlab.ui.control.Button
-        TabGroup                       matlab.ui.container.TabGroup
-        ROIsTab                        matlab.ui.container.Tab
-        CalciumTracePlottingPanel      matlab.ui.container.Panel
-        FissaLabel                     matlab.ui.control.Label
-        PlotTrace_F_fissa              matlab.ui.control.CheckBox
-        PlotTrace_Fneu_fissa           matlab.ui.control.CheckBox
-        PlotTrace_cF_fissa             matlab.ui.control.CheckBox
-        PlotTrace_AdcF_fissa           matlab.ui.control.CheckBox
-        PlotTrace_sep_fissa            matlab.ui.control.CheckBox
-        PlotTrace_nPil_fissa           matlab.ui.control.CheckBox
-        PlotTrace_dFdT_fissa           matlab.ui.control.CheckBox
-        PlotTrace_Decon_fissa          matlab.ui.control.CheckBox
-        Suite2PLabel                   matlab.ui.control.Label
-        PlotTrace_F_suite2p            matlab.ui.control.CheckBox
-        PlotTrace_Fneu_suite2p         matlab.ui.control.CheckBox
-        PlotTrace_cF_suite2p           matlab.ui.control.CheckBox
-        PlotTrace_AdcF_suite2p         matlab.ui.control.CheckBox
-        PlotTrace_dFdT_suite2p         matlab.ui.control.CheckBox
-        PlotTrace_Decon                matlab.ui.control.CheckBox
-        PlotTrace_dFdT_fissa_2         matlab.ui.control.CheckBox
-        Panel                          matlab.ui.container.Panel
-        UseYLimitsCheckBox             matlab.ui.control.CheckBox
-        UseXLimitsCheckBox             matlab.ui.control.CheckBox
-        XLimitUpper                    matlab.ui.control.NumericEditField
-        XLimitLower                    matlab.ui.control.NumericEditField
-        YLimitLower                    matlab.ui.control.NumericEditField
-        YLimitUpper                    matlab.ui.control.NumericEditField
-        OverlayDropDown                matlab.ui.control.DropDown
-        Scaling                        matlab.ui.control.DropDown
-        CDMapDropDown                  matlab.ui.control.DropDown
-        NeuronalROIs                   matlab.ui.control.UIAxes
-        RemovedROIs                    matlab.ui.control.UIAxes
-        CellSelected                   matlab.ui.control.UIAxes
-        TracePlot                      matlab.ui.control.UIAxes
-        Deconvolution                  matlab.ui.container.Tab
-        MCMCTempPanel                  matlab.ui.container.Panel
-        AROrderEditFieldLabel          matlab.ui.control.Label
-        AROrderEditField               matlab.ui.control.NumericEditField
-        gEditFieldLabel                matlab.ui.control.Label
-        gEditField                     matlab.ui.control.NumericEditField
-        BurnInEditFieldLabel           matlab.ui.control.Label
-        BurnInEditField                matlab.ui.control.NumericEditField
-        RiseEditFieldLabel             matlab.ui.control.Label
-        RiseEditField                  matlab.ui.control.NumericEditField
-        DecayEditFieldLabel            matlab.ui.control.Label
-        DecayEditField                 matlab.ui.control.NumericEditField
-        DtEditFieldLabel               matlab.ui.control.Label
-        DtEditField                    matlab.ui.control.NumericEditField
-        gEditField_2                   matlab.ui.control.NumericEditField
-        RunButton                      matlab.ui.control.Button
-        DisplayedCellEditFieldLabel    matlab.ui.control.Label
-        DisplayedCellEditField         matlab.ui.control.NumericEditField
-        RunAllButton                   matlab.ui.control.Button
-        UpdateTauButton                matlab.ui.control.Button
-        MCMC_X                         matlab.ui.control.CheckBox
-        MCMC_Y                         matlab.ui.control.CheckBox
-        MCMC_X_Min                     matlab.ui.control.NumericEditField
-        MCMC_X_Max                     matlab.ui.control.NumericEditField
-        MCMC_Y_Min                     matlab.ui.control.NumericEditField
-        MCMC_Y_Max                     matlab.ui.control.NumericEditField
-        MCMC_Axes_1                    matlab.ui.control.UIAxes
-        MCMC_Axes_3                    matlab.ui.control.UIAxes
-        Preprocessing                  matlab.ui.container.Tab
-        VideoMask                      matlab.ui.container.Tab
-        Tab_3                          matlab.ui.container.Tab
-        ROISelectionPanel              matlab.ui.container.Panel
-        ROILabel                       matlab.ui.control.Label
-        SelectedCell                   matlab.ui.control.Spinner
-        SaveButton                     matlab.ui.control.Button
-        AUTOSAVEONCLOSECheckBox        matlab.ui.control.CheckBox
-        Panel_2                        matlab.ui.container.Panel
-        EMPTYSPACELabel                matlab.ui.control.Label
-        TabGroup2                      matlab.ui.container.TabGroup
-        SelectedROIDetails             matlab.ui.container.Tab
-        CellProbabilityEditFieldLabel  matlab.ui.control.Label
-        SNREditFieldLabel              matlab.ui.control.Label
-        SNREditField                   matlab.ui.control.NumericEditField
-        CellProbabilityEditField       matlab.ui.control.NumericEditField
-        RadiusEditField                matlab.ui.control.NumericEditField
-        RadiusEditFieldLabel           matlab.ui.control.Label
-        SolidityEditField              matlab.ui.control.NumericEditField
-        SolidityLabel                  matlab.ui.control.Label
-        FootprintEditField             matlab.ui.control.NumericEditField
-        FootprintEditFieldLabel        matlab.ui.control.Label
-        CompactnessEditField           matlab.ui.control.NumericEditField
-        CompactnessEditFieldLabel      matlab.ui.control.Label
-        SomaPixelsEditFieldLabel       matlab.ui.control.Label
-        SkewEditField                  matlab.ui.control.NumericEditField
-        TotalPixelsEditFieldLabel      matlab.ui.control.Label
-        AspectEditField                matlab.ui.control.NumericEditField
-        AspectEditField_2Label         matlab.ui.control.Label
-        TotalPixelsEditField           matlab.ui.control.NumericEditField
-        SkewEditField_2Label           matlab.ui.control.Label
-        SomaPixelsEditField            matlab.ui.control.NumericEditField
-        Switch                         matlab.ui.control.Switch
-        NormSoma_EditLabel             matlab.ui.control.Label
-        NormTotal_EditLabel            matlab.ui.control.Label
-        NormTotal_EditField            matlab.ui.control.NumericEditField
-        NormSoma_EditField             matlab.ui.control.NumericEditField
-        SNRS2P_EditLabel               matlab.ui.control.Label
-        SNRS2P_EditField               matlab.ui.control.NumericEditField
-        NoiseStd_EditLabel             matlab.ui.control.Label
-        NoiseStd_EditField             matlab.ui.control.NumericEditField
-        UIAxes                         matlab.ui.control.UIAxes
-        Neuropil_Close                 matlab.ui.control.UIAxes
-        Threshold                      matlab.ui.container.Tab
-        ThresholdValueEditFieldLabel   matlab.ui.control.Label
-        ThresholdValueEditField        matlab.ui.control.NumericEditField
-        ThresholdButton                matlab.ui.control.Button
-        ResetButton                    matlab.ui.control.Button
-        AllButton                      matlab.ui.control.Button
-        NoneButton                     matlab.ui.control.Button
-        OperatorButtonGroup            matlab.ui.container.ButtonGroup
-        LessThanButton                 matlab.ui.control.RadioButton
-        GreaterThanButton              matlab.ui.control.RadioButton
-        ThresholdTypeDropDown          matlab.ui.control.DropDown
-        StatDistribution               matlab.ui.control.UIAxes
+        UIFigure                        matlab.ui.Figure
+        IOPanel                         matlab.ui.container.Panel
+        CompiledPath                    matlab.ui.control.EditField
+        OptionsPath                     matlab.ui.control.EditField
+        LoggingConsoleLabel             matlab.ui.control.Label
+        BrowseCompiled                  matlab.ui.control.Button
+        BrowseOptions                   matlab.ui.control.Button
+        LoadCompiled                    matlab.ui.control.Button
+        LoadOptions                     matlab.ui.control.Button
+        HiRasLabel                      matlab.ui.control.Label
+        v082Label                       matlab.ui.control.Label
+        LogTextArea                     matlab.ui.control.TextArea
+        Suite2PPath                     matlab.ui.control.EditField
+        BrowseSuite2P                   matlab.ui.control.Button
+        ImportImaging                   matlab.ui.control.Button
+        FIssaPath                       matlab.ui.control.EditField
+        BrowseFissa                     matlab.ui.control.Button
+        TabGroup                        matlab.ui.container.TabGroup
+        ROIsTab                         matlab.ui.container.Tab
+        CalciumTracePlottingPanel       matlab.ui.container.Panel
+        FissaLabel                      matlab.ui.control.Label
+        PlotTrace_F_fissa               matlab.ui.control.CheckBox
+        PlotTrace_Fneu_fissa            matlab.ui.control.CheckBox
+        PlotTrace_cF_fissa              matlab.ui.control.CheckBox
+        PlotTrace_AdcF_fissa            matlab.ui.control.CheckBox
+        PlotTrace_sep_fissa             matlab.ui.control.CheckBox
+        PlotTrace_nPil_fissa            matlab.ui.control.CheckBox
+        PlotTrace_dFdT_fissa            matlab.ui.control.CheckBox
+        PlotTrace_Decon_fissa           matlab.ui.control.CheckBox
+        Suite2PLabel                    matlab.ui.control.Label
+        PlotTrace_F_suite2p             matlab.ui.control.CheckBox
+        PlotTrace_Fneu_suite2p          matlab.ui.control.CheckBox
+        PlotTrace_cF_suite2p            matlab.ui.control.CheckBox
+        PlotTrace_AdcF_suite2p          matlab.ui.control.CheckBox
+        PlotTrace_dFdT_suite2p          matlab.ui.control.CheckBox
+        PlotTrace_Decon                 matlab.ui.control.CheckBox
+        PlotTrace_dFdT_fissa_2          matlab.ui.control.CheckBox
+        Panel                           matlab.ui.container.Panel
+        UseYLimitsCheckBox              matlab.ui.control.CheckBox
+        UseXLimitsCheckBox              matlab.ui.control.CheckBox
+        XLimitUpper                     matlab.ui.control.NumericEditField
+        XLimitLower                     matlab.ui.control.NumericEditField
+        YLimitLower                     matlab.ui.control.NumericEditField
+        YLimitUpper                     matlab.ui.control.NumericEditField
+        OverlayDropDown                 matlab.ui.control.DropDown
+        Scaling                         matlab.ui.control.DropDown
+        CDMapDropDown                   matlab.ui.control.DropDown
+        NeuronalROIs                    matlab.ui.control.UIAxes
+        RemovedROIs                     matlab.ui.control.UIAxes
+        CellSelected                    matlab.ui.control.UIAxes
+        TracePlot                       matlab.ui.control.UIAxes
+        Deconvolution                   matlab.ui.container.Tab
+        MCMCTempPanel                   matlab.ui.container.Panel
+        AROrderEditFieldLabel           matlab.ui.control.Label
+        AROrderEditField                matlab.ui.control.NumericEditField
+        gEditFieldLabel                 matlab.ui.control.Label
+        gEditField                      matlab.ui.control.NumericEditField
+        BurnInEditFieldLabel            matlab.ui.control.Label
+        BurnInEditField                 matlab.ui.control.NumericEditField
+        RiseEditFieldLabel              matlab.ui.control.Label
+        RiseEditField                   matlab.ui.control.NumericEditField
+        DecayEditFieldLabel             matlab.ui.control.Label
+        DecayEditField                  matlab.ui.control.NumericEditField
+        DtEditFieldLabel                matlab.ui.control.Label
+        DtEditField                     matlab.ui.control.NumericEditField
+        gEditField_2                    matlab.ui.control.NumericEditField
+        RunButton                       matlab.ui.control.Button
+        DisplayedCellEditFieldLabel     matlab.ui.control.Label
+        DisplayedCellEditField          matlab.ui.control.NumericEditField
+        RunAllButton                    matlab.ui.control.Button
+        UpdateTauButton                 matlab.ui.control.Button
+        MCMC_X                          matlab.ui.control.CheckBox
+        MCMC_Y                          matlab.ui.control.CheckBox
+        MCMC_X_Min                      matlab.ui.control.NumericEditField
+        MCMC_X_Max                      matlab.ui.control.NumericEditField
+        MCMC_Y_Min                      matlab.ui.control.NumericEditField
+        MCMC_Y_Max                      matlab.ui.control.NumericEditField
+        UPDATEPLOTSButton               matlab.ui.control.Button
+        MCMC_Axes_1                     matlab.ui.control.UIAxes
+        MCMC_Axes_3                     matlab.ui.control.UIAxes
+        Preprocessing                   matlab.ui.container.Tab
+        ProcessingParametersPanel       matlab.ui.container.Panel
+        BinSizeEditFieldLabel           matlab.ui.control.Label
+        BinSizeEditField                matlab.ui.control.NumericEditField
+        PerformBinningButton            matlab.ui.control.Button
+        HighActivityThresholdEditFieldLabel  matlab.ui.control.Label
+        HighActivityThresholdEditField  matlab.ui.control.NumericEditField
+        thresholdHA                     matlab.ui.control.Button
+        RemoveNilNeuronsButton          matlab.ui.control.Button
+        thresholdLA                     matlab.ui.control.Button
+        ExportButton                    matlab.ui.control.Button
+        PlotOptionsDropDownLabel        matlab.ui.control.Label
+        PlotOptionsDropDown             matlab.ui.control.DropDown
+        SOMETHINPanel                   matlab.ui.container.Panel
+        TextArea_2                      matlab.ui.control.TextArea
+        BinDurationEditFieldLabel       matlab.ui.control.Label
+        BinDurationEditField            matlab.ui.control.NumericEditField
+        ActivityMEANEditFieldLabel      matlab.ui.control.Label
+        meanHAField                     matlab.ui.control.NumericEditField
+        STDEVEditFieldLabel             matlab.ui.control.Label
+        stdevHAField                    matlab.ui.control.NumericEditField
+        STDEVEditFieldLabel_2           matlab.ui.control.Label
+        stdevLAField                    matlab.ui.control.NumericEditField
+        ActivityMEANEditField_2Label    matlab.ui.control.Label
+        meanLAField                     matlab.ui.control.NumericEditField
+        thresholdHyper                  matlab.ui.control.Button
+        InitializeButton                matlab.ui.control.Button
+        ImportUDFButton                 matlab.ui.control.Button
+        ProcessUDFButton                matlab.ui.control.Button
+        LowActivityThresholdEditFieldLabel  matlab.ui.control.Label
+        LowActivityThresholdEditField   matlab.ui.control.NumericEditField
+        HyperactiveThresholdEditFieldLabel  matlab.ui.control.Label
+        HyperactiveThresholdEditField   matlab.ui.control.NumericEditField
+        EmptySpacePanel                 matlab.ui.container.Panel
+        TextArea                        matlab.ui.control.TextArea
+        UIAxes2                         matlab.ui.control.UIAxes
+        VideoMask                       matlab.ui.container.Tab
+        Tab_3                           matlab.ui.container.Tab
+        ROISelectionPanel               matlab.ui.container.Panel
+        ROILabel                        matlab.ui.control.Label
+        SelectedCell                    matlab.ui.control.Spinner
+        SaveButton                      matlab.ui.control.Button
+        AUTOSAVEONCLOSECheckBox         matlab.ui.control.CheckBox
+        FilenameEditFieldLabel          matlab.ui.control.Label
+        FilenameEditField               matlab.ui.control.EditField
+        TabGroup2                       matlab.ui.container.TabGroup
+        SelectedROIDetails              matlab.ui.container.Tab
+        CellProbabilityEditFieldLabel   matlab.ui.control.Label
+        SNREditFieldLabel               matlab.ui.control.Label
+        SNREditField                    matlab.ui.control.NumericEditField
+        CellProbabilityEditField        matlab.ui.control.NumericEditField
+        RadiusEditField                 matlab.ui.control.NumericEditField
+        RadiusEditFieldLabel            matlab.ui.control.Label
+        SolidityEditField               matlab.ui.control.NumericEditField
+        SolidityLabel                   matlab.ui.control.Label
+        FootprintEditField              matlab.ui.control.NumericEditField
+        FootprintEditFieldLabel         matlab.ui.control.Label
+        CompactnessEditField            matlab.ui.control.NumericEditField
+        CompactnessEditFieldLabel       matlab.ui.control.Label
+        SomaPixelsEditFieldLabel        matlab.ui.control.Label
+        SkewEditField                   matlab.ui.control.NumericEditField
+        TotalPixelsEditFieldLabel       matlab.ui.control.Label
+        AspectEditField                 matlab.ui.control.NumericEditField
+        AspectEditField_2Label          matlab.ui.control.Label
+        TotalPixelsEditField            matlab.ui.control.NumericEditField
+        SkewEditField_2Label            matlab.ui.control.Label
+        SomaPixelsEditField             matlab.ui.control.NumericEditField
+        Switch                          matlab.ui.control.Switch
+        NormSoma_EditLabel              matlab.ui.control.Label
+        NormTotal_EditLabel             matlab.ui.control.Label
+        NormTotal_EditField             matlab.ui.control.NumericEditField
+        NormSoma_EditField              matlab.ui.control.NumericEditField
+        SNRS2P_EditLabel                matlab.ui.control.Label
+        SNRS2P_EditField                matlab.ui.control.NumericEditField
+        NoiseStd_EditLabel              matlab.ui.control.Label
+        NoiseStd_EditField              matlab.ui.control.NumericEditField
+        UIAxes                          matlab.ui.control.UIAxes
+        Neuropil_Close                  matlab.ui.control.UIAxes
+        Threshold                       matlab.ui.container.Tab
+        ThresholdValueEditFieldLabel    matlab.ui.control.Label
+        ThresholdValueEditField         matlab.ui.control.NumericEditField
+        ThresholdButton                 matlab.ui.control.Button
+        ResetButton                     matlab.ui.control.Button
+        AllButton                       matlab.ui.control.Button
+        NoneButton                      matlab.ui.control.Button
+        OperatorButtonGroup             matlab.ui.container.ButtonGroup
+        LessThanButton                  matlab.ui.control.RadioButton
+        GreaterThanButton               matlab.ui.control.RadioButton
+        ThresholdTypeDropDown           matlab.ui.control.DropDown
+        StatDistribution                matlab.ui.control.UIAxes
         RestaurantattheendoftheuniverseLabel  matlab.ui.control.Label
         RestaurantattheendoftheuniverseLabel_2  matlab.ui.control.Label
         RestaurantattheendoftheuniverseLabel_3  matlab.ui.control.Label
@@ -161,6 +197,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
           limitTracePlot_Y=0;
           suite2p_filename;  % Filename for saving
           autosave;
+          PreProcData;
     end
     
 
@@ -175,7 +212,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             if exist([procDir '\hiddenFun'],'dir')
                 addpath([procDir '\hiddenFun']);
             else
-                f_DA_update_log(app, 'ROBO RAFA: You need to move to Sweet Pee Viewer directory and reopen GUI!!!')
+                f_DA_update_log(app, 'ROBO RAFA: You need to move to Sweet Pee Viewer directory and reopen GUI!!!');
             end
             
             % startup the app
@@ -230,6 +267,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             f_DA_update_ROIs(app);
             f_DA_collect_stat_distributions(app);
             f_DA_plotStatDistribution(app);
+            app.FilenameEditField.Value = app.suite2p_filename;
             f_DA_update_log(app,'READY TO PLAY 0w0')
         end
 
@@ -547,6 +585,79 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
         function ThresholdTypeDropDownValueChanged(app, event)
             value = app.ThresholdTypeDropDown.Value;
             f_DA_plotStatDistribution(app);
+        end
+
+        % Value changed function: PlotOptionsDropDown
+        function PlotOptionsDropDownValueChanged(app, event)
+            f_DA_update_processing_plots(app);
+        end
+
+        % Button pushed function: PerformBinningButton
+        function PerformBinningButtonPushed(app, event)
+            f_DA_binData(app);
+            f_DA_initialize_newPP(app)
+        end
+
+        % Button pushed function: thresholdHA
+        function thresholdHAPushed(app, event)
+            f_DA_thresholdHA(app);
+            f_DA_initialize_newPP(app)
+        end
+
+        % Button pushed function: thresholdLA
+        function thresholdLAPushed(app, event)
+            f_DA_thresholdLA(app);
+            f_DA_initialize_newPP(app)
+        end
+
+        % Button pushed function: RemoveNilNeuronsButton
+        function RemoveNilNeuronsButtonPushed(app, event)
+            f_DA_removeNil(app);
+            f_DA_initialize_newPP(app)
+        end
+
+        % Button pushed function: InitializeButton
+        function InitializeButtonPushed(app, event)
+            f_DA_update_log(app,'Beging Initialization');
+            f_DA_initialize_PP(app);
+            f_DA_update_log(app,'Finished Initializing');
+            f_DA_update_processing_plots(app);
+        end
+
+        % Button pushed function: ImportUDFButton
+        function ImportUDFButtonPushed(app, event)
+            f_DA_import_UDF(app);
+        end
+
+        % Button pushed function: ProcessUDFButton
+        function ProcessUDFButtonPushed(app, event)
+            f_DA_process_UDF(app);
+        end
+
+        % Button pushed function: ExportButton
+        function ExportButtonPushed(app, event)
+            f_DA_export_CRFData(app);
+        end
+
+        % Value changed function: BinSizeEditField
+        function BinSizeEditFieldValueChanged(app, event)
+          f_DA_update_bin_times(app);
+        end
+
+        % Button pushed function: UPDATEPLOTSButton
+        function UPDATEPLOTSButtonPushed(app, event)
+            f_DA_update_MCMC_plot(app);
+        end
+
+        % Value changed function: HyperactiveThresholdEditField
+        function HyperactiveThresholdEditFieldValueChanged(app, event)
+            f_DA_removeHyperactive(app);
+            f_DA_initialize_newPP(app);
+        end
+
+        % Value changed function: FilenameEditField
+        function FilenameEditFieldValueChanged(app, event)
+            app.suite2p_filename = app.FilenameEditField.Value; 
         end
     end
 
@@ -1110,6 +1221,14 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.MCMC_Y_Max.Position = [213 251 40 22];
             app.MCMC_Y_Max.Value = 1;
 
+            % Create UPDATEPLOTSButton
+            app.UPDATEPLOTSButton = uibutton(app.Deconvolution, 'push');
+            app.UPDATEPLOTSButton.ButtonPushedFcn = createCallbackFcn(app, @UPDATEPLOTSButtonPushed, true);
+            app.UPDATEPLOTSButton.FontName = 'Arial';
+            app.UPDATEPLOTSButton.FontSize = 21;
+            app.UPDATEPLOTSButton.Position = [30 52 389 175];
+            app.UPDATEPLOTSButton.Text = 'UPDATE PLOTS';
+
             % Create MCMC_Axes_1
             app.MCMC_Axes_1 = uiaxes(app.Deconvolution);
             xlabel(app.MCMC_Axes_1, 'Time (s)')
@@ -1130,6 +1249,226 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.Preprocessing = uitab(app.TabGroup);
             app.Preprocessing.AutoResizeChildren = 'off';
             app.Preprocessing.Title = 'Preprocessing';
+
+            % Create ProcessingParametersPanel
+            app.ProcessingParametersPanel = uipanel(app.Preprocessing);
+            app.ProcessingParametersPanel.AutoResizeChildren = 'off';
+            app.ProcessingParametersPanel.TitlePosition = 'centertop';
+            app.ProcessingParametersPanel.Title = 'Processing Parameters';
+            app.ProcessingParametersPanel.FontName = 'Arial';
+            app.ProcessingParametersPanel.FontSize = 16;
+            app.ProcessingParametersPanel.Position = [15 15 471 719];
+
+            % Create BinSizeEditFieldLabel
+            app.BinSizeEditFieldLabel = uilabel(app.ProcessingParametersPanel);
+            app.BinSizeEditFieldLabel.HorizontalAlignment = 'right';
+            app.BinSizeEditFieldLabel.Position = [8 656 50 22];
+            app.BinSizeEditFieldLabel.Text = 'Bin Size';
+
+            % Create BinSizeEditField
+            app.BinSizeEditField = uieditfield(app.ProcessingParametersPanel, 'numeric');
+            app.BinSizeEditField.Limits = [0 Inf];
+            app.BinSizeEditField.RoundFractionalValues = 'on';
+            app.BinSizeEditField.ValueDisplayFormat = '%.0f';
+            app.BinSizeEditField.ValueChangedFcn = createCallbackFcn(app, @BinSizeEditFieldValueChanged, true);
+            app.BinSizeEditField.Position = [73 656 43 22];
+
+            % Create PerformBinningButton
+            app.PerformBinningButton = uibutton(app.ProcessingParametersPanel, 'push');
+            app.PerformBinningButton.ButtonPushedFcn = createCallbackFcn(app, @PerformBinningButtonPushed, true);
+            app.PerformBinningButton.Position = [347 656 102 22];
+            app.PerformBinningButton.Text = 'Perform Binning';
+
+            % Create HighActivityThresholdEditFieldLabel
+            app.HighActivityThresholdEditFieldLabel = uilabel(app.ProcessingParametersPanel);
+            app.HighActivityThresholdEditFieldLabel.HorizontalAlignment = 'right';
+            app.HighActivityThresholdEditFieldLabel.Position = [11 590 129 22];
+            app.HighActivityThresholdEditFieldLabel.Text = 'High-Activity Threshold';
+
+            % Create HighActivityThresholdEditField
+            app.HighActivityThresholdEditField = uieditfield(app.ProcessingParametersPanel, 'numeric');
+            app.HighActivityThresholdEditField.Limits = [0 Inf];
+            app.HighActivityThresholdEditField.ValueDisplayFormat = '%11.4g Percent';
+            app.HighActivityThresholdEditField.Position = [155 590 100 22];
+
+            % Create thresholdHA
+            app.thresholdHA = uibutton(app.ProcessingParametersPanel, 'push');
+            app.thresholdHA.ButtonPushedFcn = createCallbackFcn(app, @thresholdHAPushed, true);
+            app.thresholdHA.Position = [268 590 175 22];
+            app.thresholdHA.Text = 'Threshold';
+
+            % Create RemoveNilNeuronsButton
+            app.RemoveNilNeuronsButton = uibutton(app.ProcessingParametersPanel, 'push');
+            app.RemoveNilNeuronsButton.ButtonPushedFcn = createCallbackFcn(app, @RemoveNilNeuronsButtonPushed, true);
+            app.RemoveNilNeuronsButton.Position = [13 556 430 22];
+            app.RemoveNilNeuronsButton.Text = 'Remove Nil Neurons';
+
+            % Create thresholdLA
+            app.thresholdLA = uibutton(app.ProcessingParametersPanel, 'push');
+            app.thresholdLA.ButtonPushedFcn = createCallbackFcn(app, @thresholdLAPushed, true);
+            app.thresholdLA.Position = [309 492 134 22];
+            app.thresholdLA.Text = 'Threshold';
+
+            % Create ExportButton
+            app.ExportButton = uibutton(app.ProcessingParametersPanel, 'push');
+            app.ExportButton.ButtonPushedFcn = createCallbackFcn(app, @ExportButtonPushed, true);
+            app.ExportButton.Position = [343 426 100 22];
+            app.ExportButton.Text = 'Export';
+
+            % Create PlotOptionsDropDownLabel
+            app.PlotOptionsDropDownLabel = uilabel(app.ProcessingParametersPanel);
+            app.PlotOptionsDropDownLabel.HorizontalAlignment = 'center';
+            app.PlotOptionsDropDownLabel.FontName = 'Arial';
+            app.PlotOptionsDropDownLabel.FontSize = 16;
+            app.PlotOptionsDropDownLabel.Position = [13 340 93 22];
+            app.PlotOptionsDropDownLabel.Text = 'Plot Options';
+
+            % Create PlotOptionsDropDown
+            app.PlotOptionsDropDown = uidropdown(app.ProcessingParametersPanel);
+            app.PlotOptionsDropDown.Items = {'Raster', 'Binned Raster', 'Activity Distribution (Sum)', 'Activity Distribution (Percent)', 'Firing Distribution', '', ''};
+            app.PlotOptionsDropDown.ValueChangedFcn = createCallbackFcn(app, @PlotOptionsDropDownValueChanged, true);
+            app.PlotOptionsDropDown.FontName = 'Arial';
+            app.PlotOptionsDropDown.FontSize = 16;
+            app.PlotOptionsDropDown.Position = [110 300 355 100];
+            app.PlotOptionsDropDown.Value = 'Raster';
+
+            % Create SOMETHINPanel
+            app.SOMETHINPanel = uipanel(app.ProcessingParametersPanel);
+            app.SOMETHINPanel.AutoResizeChildren = 'off';
+            app.SOMETHINPanel.Title = 'SOMETHIN''';
+            app.SOMETHINPanel.Position = [104 37 260 221];
+
+            % Create TextArea_2
+            app.TextArea_2 = uitextarea(app.SOMETHINPanel);
+            app.TextArea_2.FontName = 'Arial';
+            app.TextArea_2.FontSize = 21;
+            app.TextArea_2.Position = [16 13 228 181];
+            app.TextArea_2.Value = {'In the beginning the Universe was created. This has made a lot of people very angry and been widely regarded as a bad move.'};
+
+            % Create BinDurationEditFieldLabel
+            app.BinDurationEditFieldLabel = uilabel(app.ProcessingParametersPanel);
+            app.BinDurationEditFieldLabel.HorizontalAlignment = 'right';
+            app.BinDurationEditFieldLabel.Position = [130 656 72 22];
+            app.BinDurationEditFieldLabel.Text = 'Bin Duration';
+
+            % Create BinDurationEditField
+            app.BinDurationEditField = uieditfield(app.ProcessingParametersPanel, 'numeric');
+            app.BinDurationEditField.Limits = [0 Inf];
+            app.BinDurationEditField.ValueDisplayFormat = '%11.4g ms';
+            app.BinDurationEditField.Position = [220 656 110 22];
+
+            % Create ActivityMEANEditFieldLabel
+            app.ActivityMEANEditFieldLabel = uilabel(app.ProcessingParametersPanel);
+            app.ActivityMEANEditFieldLabel.HorizontalAlignment = 'right';
+            app.ActivityMEANEditFieldLabel.Position = [7 623 82 22];
+            app.ActivityMEANEditFieldLabel.Text = 'Activity MEAN';
+
+            % Create meanHAField
+            app.meanHAField = uieditfield(app.ProcessingParametersPanel, 'numeric');
+            app.meanHAField.Limits = [0 Inf];
+            app.meanHAField.ValueDisplayFormat = '%11.4g Percent';
+            app.meanHAField.Position = [104 623 100 22];
+
+            % Create STDEVEditFieldLabel
+            app.STDEVEditFieldLabel = uilabel(app.ProcessingParametersPanel);
+            app.STDEVEditFieldLabel.HorizontalAlignment = 'right';
+            app.STDEVEditFieldLabel.Position = [213 623 46 22];
+            app.STDEVEditFieldLabel.Text = 'STDEV';
+
+            % Create stdevHAField
+            app.stdevHAField = uieditfield(app.ProcessingParametersPanel, 'numeric');
+            app.stdevHAField.ValueDisplayFormat = '%11.4g Percent';
+            app.stdevHAField.Position = [274 623 100 22];
+
+            % Create STDEVEditFieldLabel_2
+            app.STDEVEditFieldLabel_2 = uilabel(app.ProcessingParametersPanel);
+            app.STDEVEditFieldLabel_2.HorizontalAlignment = 'right';
+            app.STDEVEditFieldLabel_2.Position = [213 526 46 22];
+            app.STDEVEditFieldLabel_2.Text = 'STDEV';
+
+            % Create stdevLAField
+            app.stdevLAField = uieditfield(app.ProcessingParametersPanel, 'numeric');
+            app.stdevLAField.ValueDisplayFormat = '%11.4g Percent';
+            app.stdevLAField.Position = [274 526 100 22];
+
+            % Create ActivityMEANEditField_2Label
+            app.ActivityMEANEditField_2Label = uilabel(app.ProcessingParametersPanel);
+            app.ActivityMEANEditField_2Label.HorizontalAlignment = 'right';
+            app.ActivityMEANEditField_2Label.Position = [11 526 82 22];
+            app.ActivityMEANEditField_2Label.Text = 'Activity MEAN';
+
+            % Create meanLAField
+            app.meanLAField = uieditfield(app.ProcessingParametersPanel, 'numeric');
+            app.meanLAField.Limits = [0 Inf];
+            app.meanLAField.ValueDisplayFormat = '%11.4g Percent';
+            app.meanLAField.Position = [108 526 100 22];
+
+            % Create thresholdHyper
+            app.thresholdHyper = uibutton(app.ProcessingParametersPanel, 'push');
+            app.thresholdHyper.Position = [309 463 134 22];
+            app.thresholdHyper.Text = 'Threshold';
+
+            % Create InitializeButton
+            app.InitializeButton = uibutton(app.ProcessingParametersPanel, 'push');
+            app.InitializeButton.ButtonPushedFcn = createCallbackFcn(app, @InitializeButtonPushed, true);
+            app.InitializeButton.Position = [13 426 100 22];
+            app.InitializeButton.Text = 'Initialize';
+
+            % Create ImportUDFButton
+            app.ImportUDFButton = uibutton(app.ProcessingParametersPanel, 'push');
+            app.ImportUDFButton.ButtonPushedFcn = createCallbackFcn(app, @ImportUDFButtonPushed, true);
+            app.ImportUDFButton.Position = [124 426 100 22];
+            app.ImportUDFButton.Text = 'Import UDF';
+
+            % Create ProcessUDFButton
+            app.ProcessUDFButton = uibutton(app.ProcessingParametersPanel, 'push');
+            app.ProcessUDFButton.ButtonPushedFcn = createCallbackFcn(app, @ProcessUDFButtonPushed, true);
+            app.ProcessUDFButton.Position = [230 426 100 22];
+            app.ProcessUDFButton.Text = 'Process UDF';
+
+            % Create LowActivityThresholdEditFieldLabel
+            app.LowActivityThresholdEditFieldLabel = uilabel(app.ProcessingParametersPanel);
+            app.LowActivityThresholdEditFieldLabel.HorizontalAlignment = 'right';
+            app.LowActivityThresholdEditFieldLabel.Position = [14 496 126 22];
+            app.LowActivityThresholdEditFieldLabel.Text = 'Low Activity Threshold';
+
+            % Create LowActivityThresholdEditField
+            app.LowActivityThresholdEditField = uieditfield(app.ProcessingParametersPanel, 'numeric');
+            app.LowActivityThresholdEditField.Position = [155 496 104 22];
+
+            % Create HyperactiveThresholdEditFieldLabel
+            app.HyperactiveThresholdEditFieldLabel = uilabel(app.ProcessingParametersPanel);
+            app.HyperactiveThresholdEditFieldLabel.HorizontalAlignment = 'right';
+            app.HyperactiveThresholdEditFieldLabel.Position = [20 466 126 22];
+            app.HyperactiveThresholdEditFieldLabel.Text = 'Hyperactive Threshold';
+
+            % Create HyperactiveThresholdEditField
+            app.HyperactiveThresholdEditField = uieditfield(app.ProcessingParametersPanel, 'numeric');
+            app.HyperactiveThresholdEditField.ValueChangedFcn = createCallbackFcn(app, @HyperactiveThresholdEditFieldValueChanged, true);
+            app.HyperactiveThresholdEditField.Position = [161 466 100 22];
+
+            % Create EmptySpacePanel
+            app.EmptySpacePanel = uipanel(app.Preprocessing);
+            app.EmptySpacePanel.AutoResizeChildren = 'off';
+            app.EmptySpacePanel.Title = 'Empty Space';
+            app.EmptySpacePanel.Position = [500 14 876 221];
+
+            % Create TextArea
+            app.TextArea = uitextarea(app.EmptySpacePanel);
+            app.TextArea.Editable = 'off';
+            app.TextArea.FontName = 'Arial';
+            app.TextArea.FontSize = 24;
+            app.TextArea.BackgroundColor = [0.9412 0.9412 0.9412];
+            app.TextArea.Position = [9 13 855 181];
+            app.TextArea.Value = {'For instance, on the planet Earth, man had always assumed that he was more intelligent than dolphins because he had achieved so much — the wheel, New York, wars and so on — whilst all the dolphins had ever done was muck about in the water having a good time. But conversely, the dolphins had always believed that they were far more intelligent than man — for precisely the same reasons.'};
+
+            % Create UIAxes2
+            app.UIAxes2 = uiaxes(app.Preprocessing);
+            title(app.UIAxes2, 'Title')
+            xlabel(app.UIAxes2, 'X')
+            ylabel(app.UIAxes2, 'Y')
+            zlabel(app.UIAxes2, 'Z')
+            app.UIAxes2.Position = [499 245 887 489];
 
             % Create VideoMask
             app.VideoMask = uitab(app.TabGroup);
@@ -1181,16 +1520,16 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.AUTOSAVEONCLOSECheckBox.FontSize = 24;
             app.AUTOSAVEONCLOSECheckBox.Position = [24 44 337 62];
 
-            % Create Panel_2
-            app.Panel_2 = uipanel(app.ROISelectionPanel);
-            app.Panel_2.Position = [24 105 328 141];
+            % Create FilenameEditFieldLabel
+            app.FilenameEditFieldLabel = uilabel(app.ROISelectionPanel);
+            app.FilenameEditFieldLabel.HorizontalAlignment = 'right';
+            app.FilenameEditFieldLabel.Position = [24 95 55 22];
+            app.FilenameEditFieldLabel.Text = 'Filename';
 
-            % Create EMPTYSPACELabel
-            app.EMPTYSPACELabel = uilabel(app.Panel_2);
-            app.EMPTYSPACELabel.FontName = 'Arial';
-            app.EMPTYSPACELabel.FontSize = 24;
-            app.EMPTYSPACELabel.Position = [70 56 188 30];
-            app.EMPTYSPACELabel.Text = 'EMPTY SPACE?';
+            % Create FilenameEditField
+            app.FilenameEditField = uieditfield(app.ROISelectionPanel, 'text');
+            app.FilenameEditField.ValueChangedFcn = createCallbackFcn(app, @FilenameEditFieldValueChanged, true);
+            app.FilenameEditField.Position = [94 95 253 22];
 
             % Create TabGroup2
             app.TabGroup2 = uitabgroup(app.UIFigure);
