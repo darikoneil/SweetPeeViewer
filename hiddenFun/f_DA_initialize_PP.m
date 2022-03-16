@@ -10,5 +10,9 @@ app.stdevHAField.Value = std(app.PreProcData.sumActivity);
 app.PreProcData.sumNeurons = ((sum(app.PreProcData.binnedData,2))./size(app.PreProcData.binnedData,2)).*100;
 app.meanLAField.Value = mean(app.PreProcData.sumNeurons);
 app.stdevLAField.Value = std(app.PreProcData.sumNeurons);
+
+app.PreProcData.keptFrames = [];
+app.PreProcData.keptNeurons = app.ImData.NeuronIndex;
+app.PreProcData.removedNeurons = [];
 end
 

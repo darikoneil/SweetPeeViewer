@@ -7,6 +7,7 @@ S = app.PreProcData.sumActivity;
 keepthisdata = find(S>threshold);
 
 app.PreProcData.binnedData = app.PreProcData.binnedData(:,keepthisdata);
+app.PreProcData.keptFrames = keepthisdata;
 
 end
  

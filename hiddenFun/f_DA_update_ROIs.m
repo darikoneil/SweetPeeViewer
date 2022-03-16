@@ -86,6 +86,7 @@ app.UIAxes.YDir = 'reverse';
 %% Neuropil
 
 if app.ImData.imParams.procFlags.useFissa
+     C = [0 0.56 1.00];
      cla(app.Neuropil_Close,'reset'); 
      app.Neuropil_Close.XTickLabel=[];%clear axes
      app.Neuropil_Close.YTickLabel=[];
@@ -100,18 +101,18 @@ if app.ImData.imParams.procFlags.useFissa
      end
      
      v = app.SelectedCell.Value;
-     fill(app.Neuropil_Close,ROI_contours.xpix{v}(ROI_contours.boundaryOutlines{v}),ROI_contours.ypix{v}(ROI_contours.boundaryOutlines{v}),C(v,:),'FaceAlpha',0.25);
+     fill(app.Neuropil_Close,ROI_contours.xpix{v}(ROI_contours.boundaryOutlines{v}),ROI_contours.ypix{v}(ROI_contours.boundaryOutlines{v}),C,'FaceAlpha',0.25);
      
      xlim(app.Neuropil_Close,[min(ROI_contours.xpix{v})-25 max(ROI_contours.xpix{v})+25]);
      ylim(app.Neuropil_Close,[min(ROI_contours.ypix{v})-25 max(ROI_contours.ypix{v})+25]);
      
      nPilROIs = f_DA_findNeuropilROIs(app.ImData.imParams.fissa.roi_polys);
+     C = jet(double(100*app.ImData.imParams.fissa.nRegions));
      for i = 1:app.ImData.imParams.fissa.nRegions
          tmpROI = nPilROIs{v,1+i};
          for j = 1:length(tmpROI)
-             randC = randsample(length(ROI_contours), 1);
              b= boundary(tmpROI(:,1),tmpROI(:,2));
-             fill(app.Neuropil_Close, tmpROI(b,1), tmpROI(b,2), C(randC,:), 'FaceAlpha', 0.25);
+             fill(app.Neuropil_Close, tmpROI(b,1), tmpROI(b,2), [0.25 0.25 0.25], 'FaceAlpha', 0, 'EdgeAlpha',0.25, 'EdgeColor', C(i*100,:), 'LineWidth',2);
          end
      end
   
@@ -130,7 +131,8 @@ else
      
      % Now plot the selected
      v = app.SelectedCell.Value;
-     fill(app.Neuropil_Close,ROI_contours.xpix{v}(ROI_contours.boundaryOutlines{v}),ROI_contours.ypix{v}(ROI_contours.boundaryOutlines{v}),C(v,:),'FaceAlpha',0.25);
+     C = [0 0.56 1.000];
+     fill(app.Neuropil_Close,ROI_contours.xpix{v}(ROI_contours.boundaryOutlines{v}),ROI_contours.ypix{v}(ROI_contours.boundaryOutlines{v}),C,'FaceAlpha',0.25);
      
      xlim(app.Neuropil_Close,[min(ROI_contours.xpix{v})-25 max(ROI_contours.xpix{v})+25]);
      ylim(app.Neuropil_Close,[min(ROI_contours.ypix{v})-25 max(ROI_contours.ypix{v})+25]);
@@ -138,8 +140,8 @@ else
    
    [X,Y] = f_DA_convertLinearIndexToMat(app.ImData.imParams.suite2p.fops.Lx,app.ImData.imParams.suite2p.stat{v}.neuropil_mask);
    neuropilBoundaries = boundary(double(transpose(X)),double(transpose(Y)));
-   randC = randsample(length(ROI_contours), 1);
-   fill(app.Neuropil_Close,Y(neuropilBoundaries),X(neuropilBoundaries), randC, 'FaceAlpha',0.25);
+   C = [0.87 0.27 0.27];
+   fill(app.Neuropil_Close,Y(neuropilBoundaries),X(neuropilBoundaries), C, 'FaceAlpha',0.25);
    hold(app.Neuropil_Close,'off');
 end
 
