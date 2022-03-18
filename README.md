@@ -16,7 +16,7 @@ thresholds
 parallel decon
 
 Pushes:
-02/24/22 -> Fixed bug in overlays. Made some options not implemented un-editable
+02/24/22 -> Fixed bug in overlays. Made some options not implemented un-editable      
 03/03/2022 -> thresholding, neuropil      
 03/04/22-> preproccessing     
 the code works but is ugly
