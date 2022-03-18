@@ -8,16 +8,6 @@ tidy up / beautify the design (eventually---when I need to procrastinate)
 refactor the super ugly repeated code blocks / spaghetti      
 replace UIAxes with UIfigures to reduce lag when using large datatsets      
 
-DONE:
-Save Button & Autosave Flagger Functionality
-ROI Updating
-Overlays
-Colormaps
-Scaling
-norm sizes, SNR, std
-thresholds
-parallel decon
-
 Pushes:
 02/24/22 -> Fixed bug in overlays. Made some options not implemented un-editable      
 03/03/2022 -> thresholding, neuropil      
