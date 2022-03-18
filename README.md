@@ -3,7 +3,10 @@ BETA Calcium Imaging Sorter &amp; Deconvolver for Suite2P & Fissa Files
 
 
 to-do:
-full param decon functionality
+full param decon functionality      
+tidy up / beautify the design (eventually---when I need to procrastinate)     
+refactor the super ugly repeated code blocks / spaghetti      
+replace UIAxes with UIfigures to reduce lag when using large datatsets      
 
 DONE:
 Save Button & Autosave Flagger Functionality
