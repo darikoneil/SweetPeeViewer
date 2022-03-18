@@ -127,6 +127,10 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
         AUTOSAVEONCLOSECheckBox         matlab.ui.control.CheckBox
         FilenameEditFieldLabel          matlab.ui.control.Label
         FilenameEditField               matlab.ui.control.EditField
+        NeuronsEditFieldLabel           matlab.ui.control.Label
+        NeuronsEditField                matlab.ui.control.NumericEditField
+        DroppedEditFieldLabel           matlab.ui.control.Label
+        DroppedEditField                matlab.ui.control.NumericEditField
         TabGroup2                       matlab.ui.container.TabGroup
         SelectedROIDetails              matlab.ui.container.Tab
         CellProbabilityEditFieldLabel   matlab.ui.control.Label
@@ -1417,12 +1421,14 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             % Create ImportUDFButton
             app.ImportUDFButton = uibutton(app.ProcessingParametersPanel, 'push');
             app.ImportUDFButton.ButtonPushedFcn = createCallbackFcn(app, @ImportUDFButtonPushed, true);
+            app.ImportUDFButton.FontName = 'Arial';
             app.ImportUDFButton.Position = [124 426 100 22];
             app.ImportUDFButton.Text = 'Import UDF';
 
             % Create ProcessUDFButton
             app.ProcessUDFButton = uibutton(app.ProcessingParametersPanel, 'push');
             app.ProcessUDFButton.ButtonPushedFcn = createCallbackFcn(app, @ProcessUDFButtonPushed, true);
+            app.ProcessUDFButton.FontName = 'Arial';
             app.ProcessUDFButton.Position = [230 426 100 22];
             app.ProcessUDFButton.Text = 'Process UDF';
 
@@ -1434,6 +1440,8 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
 
             % Create LowActivityThresholdEditField
             app.LowActivityThresholdEditField = uieditfield(app.ProcessingParametersPanel, 'numeric');
+            app.LowActivityThresholdEditField.Limits = [0 Inf];
+            app.LowActivityThresholdEditField.ValueDisplayFormat = '%11.4g Percent';
             app.LowActivityThresholdEditField.Position = [155 496 104 22];
 
             % Create HyperactiveThresholdEditFieldLabel
@@ -1444,6 +1452,8 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
 
             % Create HyperactiveThresholdEditField
             app.HyperactiveThresholdEditField = uieditfield(app.ProcessingParametersPanel, 'numeric');
+            app.HyperactiveThresholdEditField.Limits = [0 Inf];
+            app.HyperactiveThresholdEditField.ValueDisplayFormat = '%11.4g Percent';
             app.HyperactiveThresholdEditField.ValueChangedFcn = createCallbackFcn(app, @HyperactiveThresholdEditFieldValueChanged, true);
             app.HyperactiveThresholdEditField.Position = [161 466 100 22];
 
@@ -1503,7 +1513,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.SelectedCell.FontName = 'Arial';
             app.SelectedCell.FontSize = 16;
             app.SelectedCell.FontWeight = 'bold';
-            app.SelectedCell.Position = [80 260 270 22];
+            app.SelectedCell.Position = [90 260 270 22];
             app.SelectedCell.Value = 1;
 
             % Create SaveButton
@@ -1530,6 +1540,40 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.FilenameEditField = uieditfield(app.ROISelectionPanel, 'text');
             app.FilenameEditField.ValueChangedFcn = createCallbackFcn(app, @FilenameEditFieldValueChanged, true);
             app.FilenameEditField.Position = [94 95 253 22];
+
+            % Create NeuronsEditFieldLabel
+            app.NeuronsEditFieldLabel = uilabel(app.ROISelectionPanel);
+            app.NeuronsEditFieldLabel.HorizontalAlignment = 'right';
+            app.NeuronsEditFieldLabel.FontName = 'Arial';
+            app.NeuronsEditFieldLabel.FontSize = 16;
+            app.NeuronsEditFieldLabel.FontWeight = 'bold';
+            app.NeuronsEditFieldLabel.Position = [15 220 70 22];
+            app.NeuronsEditFieldLabel.Text = 'Neurons';
+
+            % Create NeuronsEditField
+            app.NeuronsEditField = uieditfield(app.ROISelectionPanel, 'numeric');
+            app.NeuronsEditField.Limits = [0 Inf];
+            app.NeuronsEditField.ValueDisplayFormat = '%.0f';
+            app.NeuronsEditField.FontName = 'Arial';
+            app.NeuronsEditField.FontSize = 16;
+            app.NeuronsEditField.Position = [90 220 270 22];
+
+            % Create DroppedEditFieldLabel
+            app.DroppedEditFieldLabel = uilabel(app.ROISelectionPanel);
+            app.DroppedEditFieldLabel.HorizontalAlignment = 'right';
+            app.DroppedEditFieldLabel.FontName = 'Arial';
+            app.DroppedEditFieldLabel.FontSize = 16;
+            app.DroppedEditFieldLabel.FontWeight = 'bold';
+            app.DroppedEditFieldLabel.Position = [15 180 71 22];
+            app.DroppedEditFieldLabel.Text = 'Dropped';
+
+            % Create DroppedEditField
+            app.DroppedEditField = uieditfield(app.ROISelectionPanel, 'numeric');
+            app.DroppedEditField.Limits = [0 Inf];
+            app.DroppedEditField.ValueDisplayFormat = '%.0f';
+            app.DroppedEditField.FontName = 'Arial';
+            app.DroppedEditField.FontSize = 16;
+            app.DroppedEditField.Position = [90 180 270 22];
 
             % Create TabGroup2
             app.TabGroup2 = uitabgroup(app.UIFigure);

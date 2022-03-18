@@ -137,12 +137,18 @@ else
      xlim(app.Neuropil_Close,[min(ROI_contours.xpix{v})-25 max(ROI_contours.xpix{v})+25]);
      ylim(app.Neuropil_Close,[min(ROI_contours.ypix{v})-25 max(ROI_contours.ypix{v})+25]);
 
+   % Suite2P doesn't export neuropil mask for manual ROIs
+   try
+       [X,Y] = f_DA_convertLinearIndexToMat(app.ImData.imParams.suite2p.fops.Lx,app.ImData.imParams.suite2p.stat{v}.neuropil_mask);
+       neuropilBoundaries = boundary(double(transpose(X)),double(transpose(Y)));
+       C = [0.87 0.27 0.27];
+       fill(app.Neuropil_Close,Y(neuropilBoundaries),X(neuropilBoundaries), C, 'FaceAlpha',0.25);
+       hold(app.Neuropil_Close,'off');
+   catch
+       f_DA_update_log(app,'Suite2P did not export neuropil mask for this ROI');
+       hold(app.Neuropil_Close,'off');
+   end
    
-   [X,Y] = f_DA_convertLinearIndexToMat(app.ImData.imParams.suite2p.fops.Lx,app.ImData.imParams.suite2p.stat{v}.neuropil_mask);
-   neuropilBoundaries = boundary(double(transpose(X)),double(transpose(Y)));
-   C = [0.87 0.27 0.27];
-   fill(app.Neuropil_Close,Y(neuropilBoundaries),X(neuropilBoundaries), C, 'FaceAlpha',0.25);
-   hold(app.Neuropil_Close,'off');
 end
 
 app.Neuropil_Close.YDir = 'reverse';

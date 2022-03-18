@@ -74,5 +74,8 @@ f_DA_update_log(app,indicatorMsg);
 %% Now export caller memory
 app.ImData=ImData;
 
+app.NeuronsEditField.Value = length(app.ImData.NeuronIndex);
+app.DroppedEditField.Value = length(app.ImData.RemovedIndex);
+
 
 end

@@ -42,6 +42,8 @@ neuronalROIs.boundaryOutlines(RemovedIndex)=[];
 app.ImData.neuronalROIs = neuronalROIs;
 app.ImData.removedROIs = removedROIs;
 
+app.NeuronsEditField.Value = length(app.ImData.NeuronIndex);
+app.DroppedEditField.Value = length(app.ImData.RemovedIndex);
 
 end
 
