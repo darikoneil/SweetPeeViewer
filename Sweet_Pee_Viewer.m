@@ -73,6 +73,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
         DisplayedCellEditField          matlab.ui.control.NumericEditField
         RunAllButton                    matlab.ui.control.Button
         UpdateTauButton                 matlab.ui.control.Button
+        RunAllParallelButton            matlab.ui.control.Button
         MCMC_X                          matlab.ui.control.CheckBox
         MCMC_Y                          matlab.ui.control.CheckBox
         MCMC_X_Min                      matlab.ui.control.NumericEditField
@@ -476,14 +477,14 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
         % Button pushed function: RunAllButton
         function RunAllButtonPushed(app, event)
             f_DA_update_log(app,'Deconvolving All');
-            %total = size(app.ImData.imParams.suite2p.F,1)
-            %for i = 1:total
-              %  msg = ['Deconvolving ' num2str(i) ' of ' num2str(total) 'ROIs'];
-              %  f_DA_update_log(app,msg);
-              %  app.SelectedCell.Value=i;
-               % f_DA_deconvolve(app);
-               % end
-            f_DA_deconvolveP(app)
+            total = size(app.ImData.imParams.suite2p.F,1);
+            for i = 1:total
+                msg = ['Deconvolving ' num2str(i) ' of ' num2str(total) 'ROIs'];
+                f_DA_update_log(app,msg);
+                app.SelectedCell.Value=i;
+                f_DA_deconvolve(app);
+            end
+            %f_DA_deconvolveP(app)
             f_DA_update_log(app,'Finished All')
            
         end
@@ -662,6 +663,20 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
         % Value changed function: FilenameEditField
         function FilenameEditFieldValueChanged(app, event)
             app.suite2p_filename = app.FilenameEditField.Value; 
+        end
+
+        % Button pushed function: RunAllParallelButton
+        function RunAllParallelButtonPushed(app, event)
+            f_DA_update_log(app,'Deconvolving All');
+            %total = size(app.ImData.imParams.suite2p.F,1)
+            %for i = 1:total
+              %  msg = ['Deconvolving ' num2str(i) ' of ' num2str(total) 'ROIs'];
+              %  f_DA_update_log(app,msg);
+              %  app.SelectedCell.Value=i;
+               % f_DA_deconvolve(app);
+               % end
+            f_DA_deconvolveP(app)
+            f_DA_update_log(app,'Finished All')
         end
     end
 
@@ -1158,7 +1173,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.RunButton.ButtonPushedFcn = createCallbackFcn(app, @RunButtonPushed, true);
             app.RunButton.FontName = 'Arial';
             app.RunButton.FontSize = 16;
-            app.RunButton.Position = [185 11 100 26];
+            app.RunButton.Position = [125 79 100 26];
             app.RunButton.Text = 'Run';
 
             % Create DisplayedCellEditFieldLabel
@@ -1178,7 +1193,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.RunAllButton.ButtonPushedFcn = createCallbackFcn(app, @RunAllButtonPushed, true);
             app.RunAllButton.FontName = 'Arial';
             app.RunAllButton.FontSize = 16;
-            app.RunAllButton.Position = [293 11 100 26];
+            app.RunAllButton.Position = [13 33 100 26];
             app.RunAllButton.Text = 'Run All';
 
             % Create UpdateTauButton
@@ -1186,8 +1201,16 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.UpdateTauButton.ButtonPushedFcn = createCallbackFcn(app, @UpdateTauButtonPushed, true);
             app.UpdateTauButton.FontName = 'Arial';
             app.UpdateTauButton.FontSize = 16;
-            app.UpdateTauButton.Position = [76 11 100 26];
+            app.UpdateTauButton.Position = [10 79 100 26];
             app.UpdateTauButton.Text = 'Update Tau';
+
+            % Create RunAllParallelButton
+            app.RunAllParallelButton = uibutton(app.MCMCTempPanel, 'push');
+            app.RunAllParallelButton.ButtonPushedFcn = createCallbackFcn(app, @RunAllParallelButtonPushed, true);
+            app.RunAllParallelButton.FontName = 'Arial';
+            app.RunAllParallelButton.FontSize = 16;
+            app.RunAllParallelButton.Position = [125 33 136 26];
+            app.RunAllParallelButton.Text = 'Run All (Parallel)';
 
             % Create MCMC_X
             app.MCMC_X = uicheckbox(app.Deconvolution);
