@@ -17,3 +17,8 @@ Pushes:
 03/03/2022 -> thresholding, neuropil      
 03/04/22-> preproccessing the code works but is ugly      
 03/18/2022-> quick fix to accommate bug in neuropil mask export of suite2p when using manual labels
+
+
+
+### EXAMPLE     
+![example](https://github.com/darikoneil/SweetPeeVewer/blob/main/Ignore/Example1.PNG?raw=true)
