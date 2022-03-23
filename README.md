@@ -21,4 +21,4 @@ Pushes:
 
 
 ### EXAMPLE     
-[example](https://https://github.com/darikoneil/SweetPeeViewer/blob/main/Ignore/Example1.PNG?raw=True)
+[example](Example1.png)
