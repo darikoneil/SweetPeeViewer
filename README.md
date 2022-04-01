@@ -2,7 +2,7 @@
 BETA Calcium Imaging Sorter &amp; Deconvolver for Suite2P & Fissa Files
 
 ### IMPORTANT NOTE      
-Latest update broke the build's ROI plotting order in regards to overlays. Specifically, sometimes when switching ROIs the overlay defaults back to blank white space instead of the user selected overlay. In this case, simply re-select the overlay. Will be fixed ASAP.
+Latest update broke the build's ROI plotting order in regards to overlays/plotting. Specifically, sometimes when switching ROIs the overlay defaults back to blank white space instead of the user selected overlay. Also sometimes the plotting doesn't update In this case, simply re-select the overlay. Will be fixed ASAP.
 
 to-do:
 full param decon functionality      
