@@ -16,7 +16,8 @@ Pushes:
 02/24/22 -> Fixed bug in overlays. Made some options not implemented un-editable      
 03/03/2022 -> thresholding, neuropil      
 03/04/22-> preproccessing the code works but is ugly      
-03/18/2022-> quick fix to accommate bug in neuropil mask export of suite2p when using manual labels
+03/18/2022-> quick fix to accommate bug in neuropil mask export of suite2p when using manual labels     
+04/06/2022 -> Significant Update -> refactored several functions and ROI plotting for better speed and memory usage, fixed coordinates of motion-cropped overlays
 
 
 
