@@ -21,4 +21,4 @@ Pushes:
 
 
 ### EXAMPLE OF HIPPOCAMPAL INTERNEURONS 
-![example](https://github.com/darikoneil/SweetPeeViewer/blob/main/Ignore/Example1.PNG)
+![example](https://github.com/darikoneil/SweetPeeViewer/blob/main/Example1.PNG)
