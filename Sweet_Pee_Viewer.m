@@ -11,8 +11,8 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
         BrowseOptions                   matlab.ui.control.Button
         LoadCompiled                    matlab.ui.control.Button
         LoadOptions                     matlab.ui.control.Button
-        HiRasLabel                      matlab.ui.control.Label
-        v082Label                       matlab.ui.control.Label
+        SweetPeeViewerLabel             matlab.ui.control.Label
+        v083Label                       matlab.ui.control.Label
         LogTextArea                     matlab.ui.control.TextArea
         Suite2PPath                     matlab.ui.control.EditField
         BrowseSuite2P                   matlab.ui.control.Button
@@ -211,19 +211,29 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
 
         % Code that executes after component creation
         function startupFcn(app)
-          
-            % Ensure we are in the appropriate directory & Add Paths
-            procDir = fileparts(which('Sweet_Pee_Viewer'));
-            if exist([procDir '\hiddenFun'],'dir')
-                addpath([procDir '\hiddenFun']);
-            else
-                f_DA_update_log(app, 'ROBO RAFA: You need to move to Sweet Pee Viewer directory and reopen GUI!!!');
+            % This function was adapted from Yuriy Shymkiv's caiman sorter: https://github.com/shymkivy/caiman_sorter
+
+            % Ensure access to GUI and related functions 
+            % Check if deep folders are found
+            if exist(which('Sweet_Pee_Viewer'))
+                spwDir = fileparts(which('Sweet_Pee_Viewer'));
+                addpath([spwDir '\hiddenFun']);
+                addpath([spwDir '\hiddenFun\Utilities']);
+                addpath([spwDir '\hiddenFun\Plotting']);
+                addpath([spwDir '\parwaitbar-master']);
+                
+           else
+                %Inspired Yuriy Shymkiv
+                f_DA_update_log(app, 'ROBO RAFA: You need to move to the Sweet Pea Viewer directory and reopen GUI!!!');
             end
-            
-            % startup the app
-            f_DA_startup(app);
-            %initialize some parameters below
+
+            % Run constructor for some options
             f_DA_plotTraceStyles_constructor(app);
+
+            % Communication readiness to user log interface
+            f_DA_update_log(app,'GUI Started');
+            f_DA_update_log(app, 'ROBO-RAFA: Welcome new user, you should join the Yuste lab, it is great, no?');
+            f_DA_update_log(app, 'Ready to Import Results and Imaging Data');
         end
 
         % Button pushed function: BrowseCompiled
@@ -265,15 +275,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
 
         % Button pushed function: ImportImaging
         function ImportImagingButtonPushed(app, event)
-            f_DA_import_parse_imaging(app);
-            f_DA_plotTraceStyles_constructor(app);
-            f_DA_initialize_ROIs(app);
-            f_DA_update_trace_plots(app);
-            f_DA_update_ROIs(app);
-            f_DA_collect_stat_distributions(app);
-            f_DA_plotStatDistribution(app);
-            app.FilenameEditField.Value = app.suite2p_filename;
-            f_DA_update_log(app,'READY TO PLAY 0w0')
+            f_DA_importButtonTriggered(app);
         end
 
         % Value changed function: UseXLimitsCheckBox
@@ -428,9 +430,6 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
         function SwitchValueChanged(app, event)
             value = app.Switch.Value;
             f_DA_update_index(app,value);
-            f_DA_initialize_ROIs(app);
-            f_DA_update_log(app,'Neuronal Index Updated');
-            f_DA_update_ROIs(app);
         end
 
         % Close request function: UIFigure
@@ -744,22 +743,22 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.LoadOptions.Position = [341 117 81 22];
             app.LoadOptions.Text = 'Load';
 
-            % Create HiRasLabel
-            app.HiRasLabel = uilabel(app.IOPanel);
-            app.HiRasLabel.HorizontalAlignment = 'center';
-            app.HiRasLabel.FontName = 'Arial';
-            app.HiRasLabel.FontSize = 36;
-            app.HiRasLabel.FontWeight = 'bold';
-            app.HiRasLabel.Position = [64 94 118 45];
-            app.HiRasLabel.Text = 'Hi Ras';
+            % Create SweetPeeViewerLabel
+            app.SweetPeeViewerLabel = uilabel(app.IOPanel);
+            app.SweetPeeViewerLabel.HorizontalAlignment = 'center';
+            app.SweetPeeViewerLabel.FontName = 'Arial';
+            app.SweetPeeViewerLabel.FontSize = 25;
+            app.SweetPeeViewerLabel.FontWeight = 'bold';
+            app.SweetPeeViewerLabel.Position = [6 108 217 31];
+            app.SweetPeeViewerLabel.Text = 'Sweet Pee Viewer';
 
-            % Create v082Label
-            app.v082Label = uilabel(app.IOPanel);
-            app.v082Label.FontName = 'Arial';
-            app.v082Label.FontSize = 24;
-            app.v082Label.FontWeight = 'bold';
-            app.v082Label.Position = [81 69 66 30];
-            app.v082Label.Text = 'v0.82';
+            % Create v083Label
+            app.v083Label = uilabel(app.IOPanel);
+            app.v083Label.FontName = 'Arial';
+            app.v083Label.FontSize = 24;
+            app.v083Label.FontWeight = 'bold';
+            app.v083Label.Position = [81 69 66 30];
+            app.v083Label.Text = 'v0.83';
 
             % Create LogTextArea
             app.LogTextArea = uitextarea(app.IOPanel);
@@ -1122,6 +1121,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
 
             % Create BurnInEditField
             app.BurnInEditField = uieditfield(app.MCMCTempPanel, 'numeric');
+            app.BurnInEditField.ValueDisplayFormat = '%11.4g samples';
             app.BurnInEditField.Position = [80 270 100 22];
             app.BurnInEditField.Value = 200;
 
@@ -1134,6 +1134,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             % Create RiseEditField
             app.RiseEditField = uieditfield(app.MCMCTempPanel, 'numeric');
             app.RiseEditField.Limits = [0 Inf];
+            app.RiseEditField.ValueDisplayFormat = '%11.4g s';
             app.RiseEditField.Position = [80 229 100 22];
             app.RiseEditField.Value = 0.15;
 
@@ -1146,6 +1147,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             % Create DecayEditField
             app.DecayEditField = uieditfield(app.MCMCTempPanel, 'numeric');
             app.DecayEditField.Limits = [0 Inf];
+            app.DecayEditField.ValueDisplayFormat = '%11.4g s';
             app.DecayEditField.Position = [80 193 100 22];
             app.DecayEditField.Value = 1.25;
 
@@ -1158,6 +1160,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             % Create DtEditField
             app.DtEditField = uieditfield(app.MCMCTempPanel, 'numeric');
             app.DtEditField.Limits = [0 Inf];
+            app.DtEditField.ValueDisplayFormat = '%11.4g s';
             app.DtEditField.Editable = 'off';
             app.DtEditField.Position = [80 154 100 22];
             app.DtEditField.Value = Inf;
