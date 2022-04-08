@@ -18,6 +18,7 @@ Pushes:
 03/04/22-> preproccessing the code works but is ugly      
 03/18/2022-> quick fix to accommate bug in neuropil mask export of suite2p when using manual labels     
 04/06/2022 -> Significant Update -> refactored several functions and ROI plotting for better speed and memory usage, fixed coordinates of motion-cropped overlays
+04/08/2022 -> Added Import for Longitudinal Tracking (Must already be registered on my multi-day alignment tool)
 
 
 
