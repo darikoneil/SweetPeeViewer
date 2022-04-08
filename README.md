@@ -3,8 +3,8 @@ BETA app for sorting, refining, deconvolving, and post-processing Suite2P & Fiss
 
 # Inspired by Yuriy Shymkiv's [caiman sorter](https://github.com/shymkivy/caiman_sorter)      
 
-external dependencies: 
-[Matlab 2020b](https://www.mathworks.com/products/new_products/release2020b.html)
+external dependencies:      
+[Matlab 2020b](https://www.mathworks.com/products/new_products/release2020b.html)     
 [CVX](http://cvxr.com/cvx/download/)      
 
 internal dependencies:      
