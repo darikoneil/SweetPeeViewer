@@ -1,7 +1,7 @@
 # Sweet Pee Viewer v0.85
 BETA app for sorting, refining, deconvolving, and post-processing Suite2P & Fissa Datasets
 
-# Inspired by Yuriy Shymkiv's [caiman sorter](https://github.com/shymkivy/caiman_sorter)      
+Inspired by Yuriy Shymkiv's [caiman sorter](https://github.com/shymkivy/caiman_sorter)      
 
 external dependencies:      
 [Matlab 2020b](https://www.mathworks.com/products/new_products/release2020b.html)     
@@ -11,13 +11,13 @@ internal dependencies:
 ["MCMC Spike Inference in Continuous Time"](https://github.com/flatironinstitute/CaImAn-MATLAB/tree/master/deconvolution/MCMC)      
 ["Constrained Deconvolution - FOOPSI"](https://github.com/epnev/constrained-foopsi)     
 
-to-do:
+# TO-DO:
 full param decon functionality      
 tidy up / beautify the design (eventually---when I need to procrastinate)     
 refactor the super ugly repeated code blocks / spaghetti          
 
 
-Pushes:     
+# PUSHES:  
 02/24/22 -> Fixed bug in overlays. Made some options not implemented un-editable      
 03/03/2022 -> thresholding, neuropil      
 03/04/22-> preproccessing the code works but is ugly      
