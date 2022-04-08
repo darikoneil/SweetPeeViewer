@@ -44,6 +44,7 @@ app.ImData.removedROIs = removedROIs;
 
 app.NeuronsEditField.Value = length(app.ImData.NeuronIndex);
 app.DroppedEditField.Value = length(app.ImData.RemovedIndex);
+app.TotalEditField.Value = numel(app.ImData.NeuronIndex)+numel(app.ImData.RemovedIndex);
 
 % Now update the neuronal/nonneuronal plots
 f_DA_update_NeuronalROIs(app);

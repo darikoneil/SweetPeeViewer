@@ -5,14 +5,11 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
         UIFigure                        matlab.ui.Figure
         IOPanel                         matlab.ui.container.Panel
         CompiledPath                    matlab.ui.control.EditField
-        OptionsPath                     matlab.ui.control.EditField
         LoggingConsoleLabel             matlab.ui.control.Label
         BrowseCompiled                  matlab.ui.control.Button
-        BrowseOptions                   matlab.ui.control.Button
         LoadCompiled                    matlab.ui.control.Button
-        LoadOptions                     matlab.ui.control.Button
         SweetPeeViewerLabel             matlab.ui.control.Label
-        v083Label                       matlab.ui.control.Label
+        v085Label                       matlab.ui.control.Label
         LogTextArea                     matlab.ui.control.TextArea
         Suite2PPath                     matlab.ui.control.EditField
         BrowseSuite2P                   matlab.ui.control.Button
@@ -53,6 +50,19 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
         RemovedROIs                     matlab.ui.control.UIAxes
         CellSelected                    matlab.ui.control.UIAxes
         TracePlot                       matlab.ui.control.UIAxes
+        LongitudinalRegistrationTab     matlab.ui.container.Tab
+        RegistrationPath                matlab.ui.control.EditField
+        BrowseRegistration              matlab.ui.control.Button
+        LoadRegistration                matlab.ui.control.Button
+        ReplotLongNeurons               matlab.ui.control.Button
+        LongitudinalNeuronsEditFieldLabel  matlab.ui.control.Label
+        LongitudinalNeuronsEditField    matlab.ui.control.NumericEditField
+        DroppedNeuronsEditFieldLabel    matlab.ui.control.Label
+        DroppedNeuronsEditField         matlab.ui.control.NumericEditField
+        PercentRegisteredEditFieldLabel  matlab.ui.control.Label
+        PercentRegisteredEditField      matlab.ui.control.NumericEditField
+        LongitudinalNeurons             matlab.ui.control.UIAxes
+        DroppedNeurons                  matlab.ui.control.UIAxes
         Deconvolution                   matlab.ui.container.Tab
         MCMCTempPanel                   matlab.ui.container.Panel
         AROrderEditFieldLabel           matlab.ui.control.Label
@@ -120,7 +130,6 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
         TextArea                        matlab.ui.control.TextArea
         UIAxes2                         matlab.ui.control.UIAxes
         VideoMask                       matlab.ui.container.Tab
-        Tab_3                           matlab.ui.container.Tab
         ROISelectionPanel               matlab.ui.container.Panel
         ROILabel                        matlab.ui.control.Label
         SelectedCell                    matlab.ui.control.Spinner
@@ -132,6 +141,8 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
         NeuronsEditField                matlab.ui.control.NumericEditField
         DroppedEditFieldLabel           matlab.ui.control.Label
         DroppedEditField                matlab.ui.control.NumericEditField
+        TotalEditFieldLabel             matlab.ui.control.Label
+        TotalEditField                  matlab.ui.control.NumericEditField
         TabGroup2                       matlab.ui.container.TabGroup
         SelectedROIDetails              matlab.ui.container.Tab
         CellProbabilityEditFieldLabel   matlab.ui.control.Label
@@ -203,6 +214,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
           suite2p_filename;  % Filename for saving
           autosave;
           PreProcData;
+          reg_filename;
     end
     
 
@@ -220,6 +232,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
                 addpath([spwDir '\hiddenFun']);
                 addpath([spwDir '\hiddenFun\Utilities']);
                 addpath([spwDir '\hiddenFun\Plotting']);
+                addpath([spwDir '\hiddenFun\DataManipulation']);
                 addpath([spwDir '\parwaitbar-master']);
                 
            else
@@ -241,9 +254,9 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             f_DA_browse_compiled(app);
         end
 
-        % Button pushed function: BrowseOptions
-        function BrowseOptionsButtonPushed(app, event)
-            f_DA_browse_options(app);
+        % Button pushed function: BrowseRegistration
+        function BrowseRegistrationButtonPushed(app, event)
+            f_DA_browse_Registration(app);
         end
 
         % Button pushed function: BrowseFissa
@@ -268,9 +281,9 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             f_DA_update_log(app,'READY TO PLAY 0w0')
         end
 
-        % Button pushed function: LoadOptions
-        function LoadOptionsButtonPushed(app, event)
-            f_DA_load_options(app);
+        % Button pushed function: LoadRegistration
+        function LoadRegistrationButtonPushed(app, event)
+            f_DA_grab_longReg(app);
         end
 
         % Button pushed function: ImportImaging
@@ -677,6 +690,12 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             f_DA_deconvolveP(app)
             f_DA_update_log(app,'Finished All')
         end
+
+        % Button pushed function: ReplotLongNeurons
+        function ReplotLongNeuronsButtonPushed(app, event)
+            f_DA_plot_longNeurons(app);
+            f_DA_plot_shortNeurons(app);
+        end
     end
 
     % Component initialization
@@ -701,13 +720,6 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.CompiledPath.Position = [441 157 461 22];
             app.CompiledPath.Value = 'Load Pre-Compiled File (.mat)';
 
-            % Create OptionsPath
-            app.OptionsPath = uieditfield(app.IOPanel, 'text');
-            app.OptionsPath.FontName = 'Arial';
-            app.OptionsPath.Visible = 'off';
-            app.OptionsPath.Position = [441 117 461 22];
-            app.OptionsPath.Value = 'Load Options File (.mat)';
-
             % Create LoggingConsoleLabel
             app.LoggingConsoleLabel = uilabel(app.IOPanel);
             app.LoggingConsoleLabel.HorizontalAlignment = 'center';
@@ -723,25 +735,11 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.BrowseCompiled.Position = [241 157 81 22];
             app.BrowseCompiled.Text = 'Browse';
 
-            % Create BrowseOptions
-            app.BrowseOptions = uibutton(app.IOPanel, 'push');
-            app.BrowseOptions.ButtonPushedFcn = createCallbackFcn(app, @BrowseOptionsButtonPushed, true);
-            app.BrowseOptions.Visible = 'off';
-            app.BrowseOptions.Position = [241 117 81 22];
-            app.BrowseOptions.Text = 'Browse';
-
             % Create LoadCompiled
             app.LoadCompiled = uibutton(app.IOPanel, 'push');
             app.LoadCompiled.ButtonPushedFcn = createCallbackFcn(app, @LoadCompiledButtonPushed, true);
             app.LoadCompiled.Position = [341 157 81 22];
             app.LoadCompiled.Text = 'Load';
-
-            % Create LoadOptions
-            app.LoadOptions = uibutton(app.IOPanel, 'push');
-            app.LoadOptions.ButtonPushedFcn = createCallbackFcn(app, @LoadOptionsButtonPushed, true);
-            app.LoadOptions.Visible = 'off';
-            app.LoadOptions.Position = [341 117 81 22];
-            app.LoadOptions.Text = 'Load';
 
             % Create SweetPeeViewerLabel
             app.SweetPeeViewerLabel = uilabel(app.IOPanel);
@@ -752,13 +750,13 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.SweetPeeViewerLabel.Position = [6 108 217 31];
             app.SweetPeeViewerLabel.Text = 'Sweet Pee Viewer';
 
-            % Create v083Label
-            app.v083Label = uilabel(app.IOPanel);
-            app.v083Label.FontName = 'Arial';
-            app.v083Label.FontSize = 24;
-            app.v083Label.FontWeight = 'bold';
-            app.v083Label.Position = [81 69 66 30];
-            app.v083Label.Text = 'v0.83';
+            % Create v085Label
+            app.v085Label = uilabel(app.IOPanel);
+            app.v085Label.FontName = 'Arial';
+            app.v085Label.FontSize = 24;
+            app.v085Label.FontWeight = 'bold';
+            app.v085Label.Position = [81 69 66 30];
+            app.v085Label.Text = 'v0.85';
 
             % Create LogTextArea
             app.LogTextArea = uitextarea(app.IOPanel);
@@ -1074,6 +1072,113 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.TracePlot.FontSize = 16;
             app.TracePlot.Position = [340 14 1046 307];
 
+            % Create LongitudinalRegistrationTab
+            app.LongitudinalRegistrationTab = uitab(app.TabGroup);
+            app.LongitudinalRegistrationTab.AutoResizeChildren = 'off';
+            app.LongitudinalRegistrationTab.Title = 'Longitudinal Registration';
+
+            % Create RegistrationPath
+            app.RegistrationPath = uieditfield(app.LongitudinalRegistrationTab, 'text');
+            app.RegistrationPath.FontName = 'Arial';
+            app.RegistrationPath.Position = [887 298 461 22];
+            app.RegistrationPath.Value = 'Load Longitudinal Registration Index (.mat)';
+
+            % Create BrowseRegistration
+            app.BrowseRegistration = uibutton(app.LongitudinalRegistrationTab, 'push');
+            app.BrowseRegistration.ButtonPushedFcn = createCallbackFcn(app, @BrowseRegistrationButtonPushed, true);
+            app.BrowseRegistration.Position = [587 298 81 22];
+            app.BrowseRegistration.Text = 'Browse';
+
+            % Create LoadRegistration
+            app.LoadRegistration = uibutton(app.LongitudinalRegistrationTab, 'push');
+            app.LoadRegistration.ButtonPushedFcn = createCallbackFcn(app, @LoadRegistrationButtonPushed, true);
+            app.LoadRegistration.Position = [687 298 81 22];
+            app.LoadRegistration.Text = 'Load';
+
+            % Create ReplotLongNeurons
+            app.ReplotLongNeurons = uibutton(app.LongitudinalRegistrationTab, 'push');
+            app.ReplotLongNeurons.ButtonPushedFcn = createCallbackFcn(app, @ReplotLongNeuronsButtonPushed, true);
+            app.ReplotLongNeurons.Position = [787 298 81 22];
+            app.ReplotLongNeurons.Text = 'Replot';
+
+            % Create LongitudinalNeuronsEditFieldLabel
+            app.LongitudinalNeuronsEditFieldLabel = uilabel(app.LongitudinalRegistrationTab);
+            app.LongitudinalNeuronsEditFieldLabel.HorizontalAlignment = 'right';
+            app.LongitudinalNeuronsEditFieldLabel.FontName = 'Arial';
+            app.LongitudinalNeuronsEditFieldLabel.FontSize = 16;
+            app.LongitudinalNeuronsEditFieldLabel.FontWeight = 'bold';
+            app.LongitudinalNeuronsEditFieldLabel.Position = [894 258 171 22];
+            app.LongitudinalNeuronsEditFieldLabel.Text = 'Longitudinal Neurons';
+
+            % Create LongitudinalNeuronsEditField
+            app.LongitudinalNeuronsEditField = uieditfield(app.LongitudinalRegistrationTab, 'numeric');
+            app.LongitudinalNeuronsEditField.Limits = [0 Inf];
+            app.LongitudinalNeuronsEditField.ValueDisplayFormat = '%.0f';
+            app.LongitudinalNeuronsEditField.Editable = 'off';
+            app.LongitudinalNeuronsEditField.FontName = 'Arial';
+            app.LongitudinalNeuronsEditField.FontSize = 16;
+            app.LongitudinalNeuronsEditField.Position = [1070 258 270 22];
+
+            % Create DroppedNeuronsEditFieldLabel
+            app.DroppedNeuronsEditFieldLabel = uilabel(app.LongitudinalRegistrationTab);
+            app.DroppedNeuronsEditFieldLabel.HorizontalAlignment = 'right';
+            app.DroppedNeuronsEditFieldLabel.FontName = 'Arial';
+            app.DroppedNeuronsEditFieldLabel.FontSize = 16;
+            app.DroppedNeuronsEditFieldLabel.FontWeight = 'bold';
+            app.DroppedNeuronsEditFieldLabel.Position = [924 218 141 22];
+            app.DroppedNeuronsEditFieldLabel.Text = 'Dropped Neurons';
+
+            % Create DroppedNeuronsEditField
+            app.DroppedNeuronsEditField = uieditfield(app.LongitudinalRegistrationTab, 'numeric');
+            app.DroppedNeuronsEditField.Limits = [0 Inf];
+            app.DroppedNeuronsEditField.ValueDisplayFormat = '%.0f';
+            app.DroppedNeuronsEditField.Editable = 'off';
+            app.DroppedNeuronsEditField.FontName = 'Arial';
+            app.DroppedNeuronsEditField.FontSize = 16;
+            app.DroppedNeuronsEditField.Position = [1070 218 270 22];
+
+            % Create PercentRegisteredEditFieldLabel
+            app.PercentRegisteredEditFieldLabel = uilabel(app.LongitudinalRegistrationTab);
+            app.PercentRegisteredEditFieldLabel.HorizontalAlignment = 'right';
+            app.PercentRegisteredEditFieldLabel.FontName = 'Arial';
+            app.PercentRegisteredEditFieldLabel.FontSize = 16;
+            app.PercentRegisteredEditFieldLabel.FontWeight = 'bold';
+            app.PercentRegisteredEditFieldLabel.Position = [914 178 151 22];
+            app.PercentRegisteredEditFieldLabel.Text = 'Percent Registered';
+
+            % Create PercentRegisteredEditField
+            app.PercentRegisteredEditField = uieditfield(app.LongitudinalRegistrationTab, 'numeric');
+            app.PercentRegisteredEditField.Limits = [0 Inf];
+            app.PercentRegisteredEditField.ValueDisplayFormat = '%11.4g Percent';
+            app.PercentRegisteredEditField.Editable = 'off';
+            app.PercentRegisteredEditField.FontName = 'Arial';
+            app.PercentRegisteredEditField.FontSize = 16;
+            app.PercentRegisteredEditField.Position = [1070 178 270 22];
+
+            % Create LongitudinalNeurons
+            app.LongitudinalNeurons = uiaxes(app.LongitudinalRegistrationTab);
+            title(app.LongitudinalNeurons, 'Longitudinal Neurons')
+            app.LongitudinalNeurons.DataAspectRatio = [1 1 1];
+            app.LongitudinalNeurons.PlotBoxAspectRatio = [1 1 1];
+            app.LongitudinalNeurons.FontName = 'Arial';
+            app.LongitudinalNeurons.XTick = [];
+            app.LongitudinalNeurons.YTick = [];
+            app.LongitudinalNeurons.FontSize = 16;
+            app.LongitudinalNeurons.Box = 'on';
+            app.LongitudinalNeurons.Position = [554 335 400 390];
+
+            % Create DroppedNeurons
+            app.DroppedNeurons = uiaxes(app.LongitudinalRegistrationTab);
+            title(app.DroppedNeurons, 'Dropped Neurons')
+            app.DroppedNeurons.DataAspectRatio = [1 1 1];
+            app.DroppedNeurons.PlotBoxAspectRatio = [1 1 1];
+            app.DroppedNeurons.FontName = 'Arial';
+            app.DroppedNeurons.XTick = [];
+            app.DroppedNeurons.YTick = [];
+            app.DroppedNeurons.FontSize = 16;
+            app.DroppedNeurons.Box = 'on';
+            app.DroppedNeurons.Position = [976 337 400 390];
+
             % Create Deconvolution
             app.Deconvolution = uitab(app.TabGroup);
             app.Deconvolution.AutoResizeChildren = 'off';
@@ -1278,7 +1383,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             % Create Preprocessing
             app.Preprocessing = uitab(app.TabGroup);
             app.Preprocessing.AutoResizeChildren = 'off';
-            app.Preprocessing.Title = 'Preprocessing';
+            app.Preprocessing.Title = 'Post-Processing';
 
             % Create ProcessingParametersPanel
             app.ProcessingParametersPanel = uipanel(app.Preprocessing);
@@ -1510,10 +1615,6 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.VideoMask = uitab(app.TabGroup);
             app.VideoMask.AutoResizeChildren = 'off';
 
-            % Create Tab_3
-            app.Tab_3 = uitab(app.TabGroup);
-            app.Tab_3.AutoResizeChildren = 'off';
-
             % Create ROISelectionPanel
             app.ROISelectionPanel = uipanel(app.UIFigure);
             app.ROISelectionPanel.TitlePosition = 'centertop';
@@ -1580,6 +1681,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.NeuronsEditField = uieditfield(app.ROISelectionPanel, 'numeric');
             app.NeuronsEditField.Limits = [0 Inf];
             app.NeuronsEditField.ValueDisplayFormat = '%.0f';
+            app.NeuronsEditField.Editable = 'off';
             app.NeuronsEditField.FontName = 'Arial';
             app.NeuronsEditField.FontSize = 16;
             app.NeuronsEditField.Position = [90 220 270 22];
@@ -1597,9 +1699,28 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.DroppedEditField = uieditfield(app.ROISelectionPanel, 'numeric');
             app.DroppedEditField.Limits = [0 Inf];
             app.DroppedEditField.ValueDisplayFormat = '%.0f';
+            app.DroppedEditField.Editable = 'off';
             app.DroppedEditField.FontName = 'Arial';
             app.DroppedEditField.FontSize = 16;
             app.DroppedEditField.Position = [90 180 270 22];
+
+            % Create TotalEditFieldLabel
+            app.TotalEditFieldLabel = uilabel(app.ROISelectionPanel);
+            app.TotalEditFieldLabel.HorizontalAlignment = 'right';
+            app.TotalEditFieldLabel.FontName = 'Arial';
+            app.TotalEditFieldLabel.FontSize = 16;
+            app.TotalEditFieldLabel.FontWeight = 'bold';
+            app.TotalEditFieldLabel.Position = [41 139 43 22];
+            app.TotalEditFieldLabel.Text = 'Total';
+
+            % Create TotalEditField
+            app.TotalEditField = uieditfield(app.ROISelectionPanel, 'numeric');
+            app.TotalEditField.Limits = [0 Inf];
+            app.TotalEditField.ValueDisplayFormat = '%.0f';
+            app.TotalEditField.Editable = 'off';
+            app.TotalEditField.FontName = 'Arial';
+            app.TotalEditField.FontSize = 16;
+            app.TotalEditField.Position = [88 139 270 22];
 
             % Create TabGroup2
             app.TabGroup2 = uitabgroup(app.UIFigure);
