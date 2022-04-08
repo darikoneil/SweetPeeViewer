@@ -20,7 +20,7 @@ internal dependencies:
 04/06/2022 -> Significant Update -> refactored several functions and ROI plotting for better speed and memory usage, fixed coordinates of motion-cropped overlays (v0.83)      
 04/08/2022 -> Added Import for Longitudinal Tracking (must already be registered on my multi-day alignment tool) (v0.85)      
 
-# PREVIEW
+# PRreview
 
 ### EXAMPLE OF HIPPOCAMPAL INTERNEURONS - ROI SORTING     
 ![example](https://github.com/darikoneil/SweetPeeViewer/blob/main/Example_1.PNG)
