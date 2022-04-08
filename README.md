@@ -12,13 +12,7 @@ internal dependencies:
 ["MCMC Spike Inference in Continuous Time"](https://github.com/flatironinstitute/CaImAn-MATLAB/tree/master/deconvolution/MCMC)      
 ["Constrained Deconvolution - FOOPSI"](https://github.com/epnev/constrained-foopsi)     
 
-# TO-DO:
-full param decon functionality      
-tidy up / beautify the design (eventually---when I need to procrastinate)     
-refactor the super ugly repeated code blocks / spaghetti          
-
-
-# PUSHES:  
+# Update Log:  
 02/24/22 -> Fixed bug in overlays. Made some options not implemented un-editable      
 03/03/2022 -> thresholding, neuropil      
 03/04/22-> preproccessing the code works but is ugly      
@@ -36,6 +30,11 @@ refactor the super ugly repeated code blocks / spaghetti
 
 ### EXAMPLE OF HIPPOCAMPAL INTERNEURONS - LONGITUDINAL TRACKING     
 ![example](https://github.com/darikoneil/SweetPeeViewer/blob/main/Example_2.PNG)
+
+# To-Do:
+full parameter decon functionality      
+tidy up / beautify the design (eventually---when I need to procrastinate)     
+refactor the super ugly repeated code blocks / spaghetti 
 
 # Known Bug List
 
