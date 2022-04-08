@@ -1,5 +1,6 @@
 # Sweet Pee Viewer v0.85
-BETA app for sorting, refining, deconvolving, and post-processing Suite2P & Fissa Datasets
+App for sorting, refining, deconvolving, and post-processing Suite2P & Fissa datasets
+Still in BETA
 
 Inspired by Yuriy Shymkiv's [caiman sorter](https://github.com/shymkivy/caiman_sorter)      
 
@@ -35,5 +36,7 @@ refactor the super ugly repeated code blocks / spaghetti
 
 ### EXAMPLE OF HIPPOCAMPAL INTERNEURONS - LONGITUDINAL TRACKING     
 ![example](https://github.com/darikoneil/SweetPeeViewer/blob/main/Example_2.PNG)
+
+# Known Bug List
 
 
