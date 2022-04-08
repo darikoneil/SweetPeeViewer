@@ -4,11 +4,11 @@ Still in BETA
 
 Inspired by Yuriy Shymkiv's [caiman sorter](https://github.com/shymkivy/caiman_sorter)      
 
-external dependencies:      
+External dependencies:      
 [Matlab 2020b](https://www.mathworks.com/products/new_products/release2020b.html)     
 [CVX](http://cvxr.com/cvx/download/)      
 
-internal dependencies:      
+Internal dependencies:      
 ["MCMC Spike Inference in Continuous Time"](https://github.com/flatironinstitute/CaImAn-MATLAB/tree/master/deconvolution/MCMC)      
 ["Constrained Deconvolution - FOOPSI"](https://github.com/epnev/constrained-foopsi)     
 
