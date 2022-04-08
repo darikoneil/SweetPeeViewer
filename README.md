@@ -21,5 +21,8 @@ Pushes:
 
 
 
-### EXAMPLE OF HIPPOCAMPAL INTERNEURONS 
-![example](https://github.com/darikoneil/SweetPeeViewer/blob/main/Example1.PNG)
+### EXAMPLE OF HIPPOCAMPAL INTERNEURONS - ROI SORTING     
+![example](https://github.com/darikoneil/SweetPeeViewer/blob/main/Example_1.PNG)
+
+### EXAMPLE OF HIPPOCAMPAL INTERNEURONS - LONGITUDINAL TRACKING     
+![example](https://github.com/darikoneil/SweetPeeViewer/blob/main/Example_2.PNG)
