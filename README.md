@@ -21,7 +21,7 @@ Internal dependencies:
 04/08/2022 -> Added Import for Longitudinal Tracking (must already be registered on my multi-day alignment tool) (v0.85)      
 04/11/2022 -> Sped up deconvolution plotting
 
-# PRreview
+# Preview
 
 ### EXAMPLE OF HIPPOCAMPAL INTERNEURONS - ROI SORTING     
 
@@ -30,9 +30,9 @@ Internal dependencies:
 ### EXAMPLE OF HIPPOCAMPAL INTERNEURONS - LONGITUDINAL TRACKING     
 
 # To-Do:
-full parameter decon functionality      
-tidy up / beautify the design (eventually---when I need to procrastinate)     
-refactor the super ugly repeated code blocks / spaghetti 
+* full parameter decon functionality      
+* tidy up / beautify the design (eventually---when I need to procrastinate)     
+* refactor the super ugly repeated code blocks / spaghetti 
 
 # Known Bug List      
 * Updates on some functions are pushed in bulk to logging console when the function is finished
