@@ -24,10 +24,13 @@ Internal dependencies:
 # Preview
 
 ### EXAMPLE OF HIPPOCAMPAL INTERNEURONS - ROI SORTING     
+![example1](https://github.com/darikoneil/SweetPeeViewer/blob/main/Example1.PNG)
 
 ### EXAMPLE OF HIPPOCAMPAL INTERNEURONS - DECONVOLUTION    
+![example3](https://github.com/darikoneil/SweetPeeViewer/blob/main/Example3.PNG)
 
-### EXAMPLE OF HIPPOCAMPAL INTERNEURONS - LONGITUDINAL TRACKING     
+### EXAMPLE OF HIPPOCAMPAL INTERNEURONS - LONGITUDINAL TRACKING    
+![example2](https://github.com/darikoneil/SweetPeeViewer/blob/main/Example2.PNG)
 
 # To-Do:
 * full parameter decon functionality      
