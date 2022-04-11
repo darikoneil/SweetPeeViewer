@@ -19,10 +19,23 @@ B = app.BurnInEditField.Value;
 app.gEditField_2.Value = g(1);
 app.gEditField.Value = g(2);
 
-params.g = g;
+%params.b_1b=app.BaselineEditField.Value;
+%params.A_lb=app.AmplitudeEditField.Value;
+
 params.p = p;
 params.f = fr;
 params.B = B;
+if app.forceTau
+    if app.AROrderEditField.Value==2
+        params.g = g;
+    else
+        params.g=g(2);
+    end
+else
+    params.g=[];
+end
+
+
 
 if app.ImData.imParams.procFlags.useFissa
     trace = app.ImData.imParams.fissa.AdcFF(v,:);
@@ -34,6 +47,7 @@ end
 
 %% Deconv
 f_DA_update_log(app,'Starting MCMC');
+drawnow;
 SAMPLES = cont_ca_sampler(trace,params);
 app.ImData.MCMC{v}=SAMPLES;
 
@@ -45,6 +59,7 @@ f_DA_update_MCMC_plot(app);
 
 %% Done
 f_DA_update_log(app,'Finished MCMC');
+drawnow;
 
 end
 

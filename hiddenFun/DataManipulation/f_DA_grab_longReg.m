@@ -1,10 +1,10 @@
-function f_DA_grab_longReg(app)
+function f_DA_grab_longReg(app, mappingIndex)
 
 longReg = load(app.reg_filename);
 
 %FOR REF/CURRENT == FIRST FILE
 
-LongIndex = longReg.roiMatchData.allSessionMapping(:,1);
+LongIndex = longReg.roiMatchData.allSessionMapping(:,mappingIndex);
 LongNeurons = app.ImData.NeuronIndex(LongIndex);
 LongNeurons = sort(unique(LongNeurons),'ascend');
 ShortIndex = setdiff([1:numel(app.ImData.NeuronIndex)],sort(unique(LongIndex),'ascend'));

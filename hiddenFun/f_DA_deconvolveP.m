@@ -6,20 +6,20 @@ function f_DA_deconvolveP(app)
 
 %% Grab params
 
-tau_r = app.RiseEditField.Value;
-tau_d = app.DecayEditField.Value;
+%tau_r = app.RiseEditField.Value;
+%tau_d = app.DecayEditField.Value;
 fr = app.ImData.fr;
 dT = 1/(fr);
 app.DtEditField.Value = dT;
 p = app.AROrderEditField.Value;
 B = app.BurnInEditField.Value;
 %convert to discrete
-[g,~] = tau_c2d(tau_r,tau_d,dT);
+%[g,~] = tau_c2d(tau_r,tau_d,dT);
 
-app.gEditField_2.Value = g(1);
-app.gEditField.Value = g(2);
+%app.gEditField_2.Value = g(1);
+%app.gEditField.Value = g(2);
 
-params.g = g;
+params.g = [];
 params.p = p;
 params.f = fr;
 params.B = B;

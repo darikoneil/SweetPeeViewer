@@ -19,9 +19,12 @@ function f_DA_update_MCMC_plot(app)
   
 
 %First reset 
-cla(app.MCMC_Axes_1,'reset');
+%cla(app.MCMC_Axes_1,'reset');
 %cla(app.MCMC_Axes_2,'reset'); MERGED
-cla(app.MCMC_Axes_3,'reset');
+%cla(app.MCMC_Axes_3,'reset');
+
+set(app.MCMC_Axes_1,'NextPlot','replacechildren');
+set(app.MCMC_Axes_3,'NextPlot','replacechildren');
 
 %grab
 v = app.SelectedCell.Value;
@@ -87,7 +90,7 @@ imagesc(app.MCMC_Axes_3,app.ImData.TimeStamps, length(SAMPLES.ns),samples_cell2m
  
  %unbox
  app.MCMC_Axes_1.Box='off';
-  app.MCMC_Axes_3.Box='off';
+ app.MCMC_Axes_3.Box='off';
  %set X label
  app.MCMC_Axes_1.XLabel.String = 'Time (s)';
  app.MCMC_Axes_3.XLabel.String = 'Time (s)';
