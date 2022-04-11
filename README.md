@@ -19,6 +19,7 @@ Internal dependencies:
 03/18/2022-> quick fix to accommate bug in neuropil mask export of suite2p when using manual labels     
 04/06/2022 -> Significant Update -> refactored several functions and ROI plotting for better speed and memory usage, fixed coordinates of motion-cropped overlays (v0.83)      
 04/08/2022 -> Added Import for Longitudinal Tracking (must already be registered on my multi-day alignment tool) (v0.85)      
+04/11/2022 -> Sped up deconvolution plotting
 
 # PRreview
 
@@ -33,6 +34,6 @@ full parameter decon functionality
 tidy up / beautify the design (eventually---when I need to procrastinate)     
 refactor the super ugly repeated code blocks / spaghetti 
 
-# Known Bug List
-
+# Known Bug List      
+* Updates on some functions are pushed in bulk to logging console when the function is finished
 
