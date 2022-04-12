@@ -9,13 +9,14 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
         BrowseCompiled                  matlab.ui.control.Button
         LoadCompiled                    matlab.ui.control.Button
         SweetPeeViewerLabel             matlab.ui.control.Label
-        v085Label                       matlab.ui.control.Label
+        v086Label                       matlab.ui.control.Label
         LogTextArea                     matlab.ui.control.TextArea
         Suite2PPath                     matlab.ui.control.EditField
         BrowseSuite2P                   matlab.ui.control.Button
         ImportImaging                   matlab.ui.control.Button
         FIssaPath                       matlab.ui.control.EditField
         BrowseFissa                     matlab.ui.control.Button
+        Image                           matlab.ui.control.Image
         TabGroup                        matlab.ui.container.TabGroup
         ROIsTab                         matlab.ui.container.Tab
         CalciumTracePlottingPanel       matlab.ui.container.Panel
@@ -120,7 +121,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
         ExportButton                    matlab.ui.control.Button
         PlotOptionsDropDownLabel        matlab.ui.control.Label
         PlotOptionsDropDown             matlab.ui.control.DropDown
-        SOMETHINPanel                   matlab.ui.container.Panel
+        Panel_2                         matlab.ui.container.Panel
         TextArea_2                      matlab.ui.control.TextArea
         BinDurationEditFieldLabel       matlab.ui.control.Label
         BinDurationEditField            matlab.ui.control.NumericEditField
@@ -140,8 +141,6 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
         LowActivityThresholdEditField   matlab.ui.control.NumericEditField
         HyperactiveThresholdEditFieldLabel  matlab.ui.control.Label
         HyperactiveThresholdEditField   matlab.ui.control.NumericEditField
-        EmptySpacePanel                 matlab.ui.container.Panel
-        TextArea                        matlab.ui.control.TextArea
         UIAxes2                         matlab.ui.control.UIAxes
         VideoMask                       matlab.ui.container.Tab
         RegionofInterestOveriewPanel    matlab.ui.container.Panel
@@ -156,7 +155,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
         DroppedEditFieldLabel           matlab.ui.control.Label
         DroppedEditField                matlab.ui.control.NumericEditField
         TotalROIsEditFieldLabel         matlab.ui.control.Label
-        TotalROIsEditField              matlab.ui.control.NumericEditField
+        TotalEditField                  matlab.ui.control.NumericEditField
         AutosaveUponClosingLabel        matlab.ui.control.Label
         TabGroup2                       matlab.ui.container.TabGroup
         SelectedROIDetails              matlab.ui.container.Tab
@@ -782,13 +781,13 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.SweetPeeViewerLabel.Position = [6 108 217 31];
             app.SweetPeeViewerLabel.Text = 'Sweet Pee Viewer';
 
-            % Create v085Label
-            app.v085Label = uilabel(app.IOPanel);
-            app.v085Label.FontName = 'Arial';
-            app.v085Label.FontSize = 24;
-            app.v085Label.FontWeight = 'bold';
-            app.v085Label.Position = [81 69 66 30];
-            app.v085Label.Text = 'v0.85';
+            % Create v086Label
+            app.v086Label = uilabel(app.IOPanel);
+            app.v086Label.FontName = 'Arial';
+            app.v086Label.FontSize = 24;
+            app.v086Label.FontWeight = 'bold';
+            app.v086Label.Position = [81 69 66 30];
+            app.v086Label.Text = 'v0.86';
 
             % Create LogTextArea
             app.LogTextArea = uitextarea(app.IOPanel);
@@ -826,6 +825,12 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.BrowseFissa.ButtonPushedFcn = createCallbackFcn(app, @BrowseFissaButtonPushed, true);
             app.BrowseFissa.Position = [920 118 81 22];
             app.BrowseFissa.Text = 'Browse';
+
+            % Create Image
+            app.Image = uiimage(app.IOPanel);
+            app.Image.ScaleMethod = 'fill';
+            app.Image.Position = [1598 17 302 162];
+            app.Image.ImageSource = 'DENMARK.jpg';
 
             % Create TabGroup
             app.TabGroup = uitabgroup(app.UIFigure);
@@ -1583,6 +1588,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             % Create ExportButton
             app.ExportButton = uibutton(app.ProcessingParametersPanel, 'push');
             app.ExportButton.ButtonPushedFcn = createCallbackFcn(app, @ExportButtonPushed, true);
+            app.ExportButton.Enable = 'off';
             app.ExportButton.Position = [343 426 100 22];
             app.ExportButton.Text = 'Export';
 
@@ -1603,17 +1609,16 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.PlotOptionsDropDown.Position = [110 300 355 100];
             app.PlotOptionsDropDown.Value = 'Raster';
 
-            % Create SOMETHINPanel
-            app.SOMETHINPanel = uipanel(app.ProcessingParametersPanel);
-            app.SOMETHINPanel.AutoResizeChildren = 'off';
-            app.SOMETHINPanel.Title = 'SOMETHIN''';
-            app.SOMETHINPanel.Position = [104 37 260 221];
+            % Create Panel_2
+            app.Panel_2 = uipanel(app.ProcessingParametersPanel);
+            app.Panel_2.AutoResizeChildren = 'off';
+            app.Panel_2.Position = [104 37 260 221];
 
             % Create TextArea_2
-            app.TextArea_2 = uitextarea(app.SOMETHINPanel);
+            app.TextArea_2 = uitextarea(app.Panel_2);
             app.TextArea_2.FontName = 'Arial';
             app.TextArea_2.FontSize = 21;
-            app.TextArea_2.Position = [16 13 228 181];
+            app.TextArea_2.Position = [13 16 231 191];
             app.TextArea_2.Value = {'In the beginning the Universe was created. This has made a lot of people very angry and been widely regarded as a bad move.'};
 
             % Create BinDurationEditFieldLabel
@@ -1689,6 +1694,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.ImportUDFButton = uibutton(app.ProcessingParametersPanel, 'push');
             app.ImportUDFButton.ButtonPushedFcn = createCallbackFcn(app, @ImportUDFButtonPushed, true);
             app.ImportUDFButton.FontName = 'Arial';
+            app.ImportUDFButton.Enable = 'off';
             app.ImportUDFButton.Position = [124 426 100 22];
             app.ImportUDFButton.Text = 'Import UDF';
 
@@ -1696,6 +1702,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.ProcessUDFButton = uibutton(app.ProcessingParametersPanel, 'push');
             app.ProcessUDFButton.ButtonPushedFcn = createCallbackFcn(app, @ProcessUDFButtonPushed, true);
             app.ProcessUDFButton.FontName = 'Arial';
+            app.ProcessUDFButton.Enable = 'off';
             app.ProcessUDFButton.Position = [230 426 100 22];
             app.ProcessUDFButton.Text = 'Process UDF';
 
@@ -1723,21 +1730,6 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.HyperactiveThresholdEditField.ValueDisplayFormat = '%11.4g Percent';
             app.HyperactiveThresholdEditField.ValueChangedFcn = createCallbackFcn(app, @HyperactiveThresholdEditFieldValueChanged, true);
             app.HyperactiveThresholdEditField.Position = [161 466 100 22];
-
-            % Create EmptySpacePanel
-            app.EmptySpacePanel = uipanel(app.Preprocessing);
-            app.EmptySpacePanel.AutoResizeChildren = 'off';
-            app.EmptySpacePanel.Title = 'Empty Space';
-            app.EmptySpacePanel.Position = [500 12 876 221];
-
-            % Create TextArea
-            app.TextArea = uitextarea(app.EmptySpacePanel);
-            app.TextArea.Editable = 'off';
-            app.TextArea.FontName = 'Arial';
-            app.TextArea.FontSize = 24;
-            app.TextArea.BackgroundColor = [0.9412 0.9412 0.9412];
-            app.TextArea.Position = [9 13 855 181];
-            app.TextArea.Value = {'For instance, on the planet Earth, man had always assumed that he was more intelligent than dolphins because he had achieved so much — the wheel, New York, wars and so on — whilst all the dolphins had ever done was muck about in the water having a good time. But conversely, the dolphins had always believed that they were far more intelligent than man — for precisely the same reasons.'};
 
             % Create UIAxes2
             app.UIAxes2 = uiaxes(app.Preprocessing);
@@ -1851,14 +1843,14 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.TotalROIsEditFieldLabel.Position = [17 106 80 22];
             app.TotalROIsEditFieldLabel.Text = 'Total ROIs';
 
-            % Create TotalROIsEditField
-            app.TotalROIsEditField = uieditfield(app.RegionofInterestOveriewPanel, 'numeric');
-            app.TotalROIsEditField.Limits = [0 Inf];
-            app.TotalROIsEditField.ValueDisplayFormat = '%.0f';
-            app.TotalROIsEditField.Editable = 'off';
-            app.TotalROIsEditField.FontName = 'Arial';
-            app.TotalROIsEditField.FontSize = 16;
-            app.TotalROIsEditField.Position = [103 106 270 22];
+            % Create TotalEditField
+            app.TotalEditField = uieditfield(app.RegionofInterestOveriewPanel, 'numeric');
+            app.TotalEditField.Limits = [0 Inf];
+            app.TotalEditField.ValueDisplayFormat = '%.0f';
+            app.TotalEditField.Editable = 'off';
+            app.TotalEditField.FontName = 'Arial';
+            app.TotalEditField.FontSize = 16;
+            app.TotalEditField.Position = [103 106 270 22];
 
             % Create AutosaveUponClosingLabel
             app.AutosaveUponClosingLabel = uilabel(app.RegionofInterestOveriewPanel);
