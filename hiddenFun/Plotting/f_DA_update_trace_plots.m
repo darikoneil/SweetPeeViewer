@@ -155,9 +155,16 @@ if plotTraceStyles.PlotcF_fissa
 end
 
 if plotTraceStyles.PlotAdcF_fissa
-       hold(app.TracePlot,'on');
-       plot(app.TracePlot,app.ImData.TimeStamps,app.ImData.imParams.fissa.AdcFF(v,:),'LineWidth',2);
-       hold(app.TracePlot,'off')
+       if numPlots >1
+           hold(app.TracePlot,'on');
+           plot(app.TracePlot,app.ImData.TimeStamps,app.ImData.imParams.fissa.AdcFF(v,:),'LineWidth',2);
+           hold(app.TracePlot,'off')
+           numPlots=numPlots+1;
+       else
+           plot(app.TracePlot,app.ImData.TimeStamps,app.ImData.imParams.fissa.AdcFF(v,:),'LineWidth',2);
+           numPlots=numPlots+1;
+       end
+           
 end
 
 if plotTraceStyles.PlotSep_fissa

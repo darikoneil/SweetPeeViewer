@@ -62,4 +62,7 @@ else
     hold(app.NeuronalROIs,'off');
 end
 
+app.NeuronalROIs.XLim=[0 app.ImData.ROI_bounds(1)];
+app.NeuronalROIs.YLim= [0 app.ImData.ROI_bounds(2)];
+
 end

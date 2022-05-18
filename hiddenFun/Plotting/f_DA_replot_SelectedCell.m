@@ -68,4 +68,7 @@ else
     fill(app.CellSelected,ROI_contours.xpix{v}(ROI_contours.boundaryOutlines{v}),ROI_contours.ypix{v}(ROI_contours.boundaryOutlines{v}),[0.87 0.27 0.27],'FaceAlpha',0, 'EdgeColor',[0.87 0.27 0.27], 'EdgeAlpha',1, 'LineJoin', 'round', 'LineWidth', 2);
     app.CellSelected.YDir = 'reverse';
     hold(app.CellSelected,'off');
+    
+    app.CellSelected.XLim=[0 app.ImData.ROI_bounds(1)];
+    app.CellSelected.YLim= [0 app.ImData.ROI_bounds(2)];
 end

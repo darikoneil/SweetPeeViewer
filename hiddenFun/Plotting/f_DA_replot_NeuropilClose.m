@@ -10,7 +10,9 @@ CDMap = app.CDMapDropDown.Value;
 ROI_contours = app.ImData.ROI_conoturs;
 ROI_bounds = app.ImData.ROI_bounds;
 
-if app.ImData.imParams.procFlags.useFissa
+debug=1;
+%if app.ImData.imParams.procFlags.useFissa
+if debug == 0
     if strcmp(app.OverlayDropDown.Value,'No Overlay')
         C = [0 0.56 1.00];
         %first first
@@ -52,13 +54,13 @@ if app.ImData.imParams.procFlags.useFissa
     else
         %first first
         i=1;
-        fill(app.Neuropil_Close,ROI_contours.xpix{i}(ROI_contours.boundaryOutlines{i}),ROI_contours.ypix{i}(ROI_contours.boundaryOutlines{i}),'FaceAlpha',0,'EdgeAlpha',1, 'LineJoin','round','LineWidth',1);
+        fill(app.Neuropil_Close,ROI_contours.xpix{i}(ROI_contours.boundaryOutlines{i}),ROI_contours.ypix{i}(ROI_contours.boundaryOutlines{i}), 'k', 'FaceAlpha',0,'EdgeAlpha',0.75, 'LineJoin','round','LineWidth',1);
         hold(app.Neuropil_Close,'on');
         for i = 2:length(ROI_contours.xpix)
-            fill(app.Neuropil_Close,ROI_contours.xpix{i}(ROI_contours.boundaryOutlines{i}),ROI_contours.ypix{i}(ROI_contours.boundaryOutlines{i}),'FaceAlpha',0,'EdgeAlpha',1, 'LineJoin','round','LineWidth',1);
+            fill(app.Neuropil_Close,ROI_contours.xpix{i}(ROI_contours.boundaryOutlines{i}),ROI_contours.ypix{i}(ROI_contours.boundaryOutlines{i}),'k', 'FaceAlpha',0,'EdgeAlpha',0.75, 'LineJoin','round','LineWidth',1);
         end
         v = app.SelectedCell.Value;
-        fill(app.Neuropil_Close,ROI_contours.xpix{v}(ROI_contours.boundaryOutlines{v}),ROI_contours.ypix{v}(ROI_contours.boundaryOutlines{v}),'FaceAlpha',0,'EdgeAlpha',1,'EdgeColor',[0.87 0.27 0.27], 'LineJoin','round','LineWidth',2);
+        fill(app.Neuropil_Close,ROI_contours.xpix{v}(ROI_contours.boundaryOutlines{v}),ROI_contours.ypix{v}(ROI_contours.boundaryOutlines{v}),'k', 'FaceAlpha',0,'EdgeAlpha',1,'EdgeColor',[0.87 0.27 0.27], 'LineJoin','round','LineWidth',2);
         
         xlim(app.Neuropil_Close,[min(ROI_contours.xpix{v})-25 max(ROI_contours.xpix{v})+25]);
         ylim(app.Neuropil_Close,[min(ROI_contours.ypix{v})-25 max(ROI_contours.ypix{v})+25]);
@@ -69,7 +71,7 @@ if app.ImData.imParams.procFlags.useFissa
             tmpROI = nPilROIs{v,1+i};
             for j = 1:length(tmpROI)
                b= boundary(tmpROI(:,1),tmpROI(:,2));
-               fill(app.Neuropil_Close, tmpROI(b,1), tmpROI(b,2), [0.25 0.25 0.25], 'FaceAlpha', 0, 'EdgeAlpha',0.25, 'EdgeColor', C(i*100,:), 'LineJoin', 'round', 'LineWidth',2);
+               fill(app.Neuropil_Close, tmpROI(b,1), tmpROI(b,2), [0.25 0.25 0.25], 'FaceAlpha', 0, 'EdgeAlpha',1, 'EdgeColor', [0.25 0.25 0.25], 'LineJoin', 'round', 'LineWidth',2);
             end
          end
          if strcmp(app.OverlayDropDown.Value,'Max Projection')

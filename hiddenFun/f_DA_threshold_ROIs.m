@@ -17,6 +17,9 @@ for i = 1:size(app.ImData.imParams.suite2p.F,1)
     end
 end
 
+%keep unique
+app.ImData.RemovedIndex = unique(app.ImData.RemovedIndex);
+
 %% Update ROI Structures
 ROI_contours = app.ImData.ROI_conoturs;
 RemovedIndex = app.ImData.RemovedIndex;

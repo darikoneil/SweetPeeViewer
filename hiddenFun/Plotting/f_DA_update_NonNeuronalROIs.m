@@ -1,6 +1,8 @@
 function f_DA_update_NonNeuronalROIs(app)
 % Darik ONeil 04/06/2022 Function to update RemovedROIs / Overlay
 
+set(app.RemovedROIs,'NextPlot','replacechildren');
+
 % Grab the data
 nROI_contours = app.ImData.removedROIs;
 
@@ -59,5 +61,8 @@ else
     end
     hold(app.RemovedROIs,'off');
 end
+
+app.RemovedROIs.XLim=[0 app.ImData.ROI_bounds(1)];
+app.RemovedROIs.YLim= [0 app.ImData.ROI_bounds(2)];
 
 end

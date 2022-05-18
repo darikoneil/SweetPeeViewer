@@ -11,7 +11,11 @@ if nargin<5
     numComponents=4;
 end
 
-blockSize = [7265 7000 7000 7000 7000];
+blockSize=zeros(1,S2);
+for i = 1:S2
+    blockSize(i) = length(result{1,i});
+end
+
 L = sum(blockSize);
 
 cF = nan(1123,L);

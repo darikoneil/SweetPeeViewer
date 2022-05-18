@@ -89,7 +89,9 @@ app.UIAxes.YDir = 'reverse';
 
 %% Neuropil
  set(app.Neuropil_Close, 'NextPlot', 'replacechildren');
-if app.ImData.imParams.procFlags.useFissa
+%if app.ImData.imParams.procFlags.useFissa
+debug=1;
+if debug==0
      C = [0 0.56 1.00];
      %cla(app.Neuropil_Close,'reset'); 
      %app.Neuropil_Close.XTickLabel=[];%clear axes

@@ -53,10 +53,6 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
         ScalingLabel                    matlab.ui.control.Label
         ColormapLabel                   matlab.ui.control.Label
         HiddenPanel                     matlab.ui.container.Panel
-        NeuronalROIs                    matlab.ui.control.UIAxes
-        RemovedROIs                     matlab.ui.control.UIAxes
-        CellSelected                    matlab.ui.control.UIAxes
-        TracePlot                       matlab.ui.control.UIAxes
         LongitudinalRegistrationTab     matlab.ui.container.Tab
         RegistrationPath                matlab.ui.control.EditField
         BrowseRegistration              matlab.ui.control.Button
@@ -70,8 +66,6 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
         PercentRegisteredEditField      matlab.ui.control.NumericEditField
         MappingIndexSpinnerLabel        matlab.ui.control.Label
         MappingIndexSpinner             matlab.ui.control.Spinner
-        LongitudinalNeurons             matlab.ui.control.UIAxes
-        DroppedNeurons                  matlab.ui.control.UIAxes
         Deconvolution                   matlab.ui.container.Tab
         MCMCTempPanel                   matlab.ui.container.Panel
         AROrderEditFieldLabel           matlab.ui.control.Label
@@ -106,8 +100,6 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
         MCMC_Y_Min                      matlab.ui.control.NumericEditField
         MCMC_Y_Max                      matlab.ui.control.NumericEditField
         UPDATEPLOTSButton               matlab.ui.control.Button
-        MCMC_Axes_1                     matlab.ui.control.UIAxes
-        MCMC_Axes_3                     matlab.ui.control.UIAxes
         Preprocessing                   matlab.ui.container.Tab
         ProcessingParametersPanel       matlab.ui.container.Panel
         BinSizeEditFieldLabel           matlab.ui.control.Label
@@ -141,7 +133,6 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
         LowActivityThresholdEditField   matlab.ui.control.NumericEditField
         HyperactiveThresholdEditFieldLabel  matlab.ui.control.Label
         HyperactiveThresholdEditField   matlab.ui.control.NumericEditField
-        UIAxes2                         matlab.ui.control.UIAxes
         VideoMask                       matlab.ui.container.Tab
         RegionofInterestOveriewPanel    matlab.ui.container.Panel
         ROILabel                        matlab.ui.control.Label
@@ -188,8 +179,6 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
         SNRS2P_EditField                matlab.ui.control.NumericEditField
         NoiseStd_EditLabel              matlab.ui.control.Label
         NoiseStd_EditField              matlab.ui.control.NumericEditField
-        UIAxes                          matlab.ui.control.UIAxes
-        Neuropil_Close                  matlab.ui.control.UIAxes
         Threshold                       matlab.ui.container.Tab
         ThresholdValueEditFieldLabel    matlab.ui.control.Label
         ThresholdValueEditField         matlab.ui.control.NumericEditField
@@ -201,7 +190,6 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
         LessThanButton                  matlab.ui.control.RadioButton
         GreaterThanButton               matlab.ui.control.RadioButton
         ThresholdTypeDropDown           matlab.ui.control.DropDown
-        StatDistribution                matlab.ui.control.UIAxes
     end
 
     
@@ -227,6 +215,18 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
           reg_filename;
           mappingIndex=1;
           forceTau=1;
+          NeuronalROIs; %Axes handle for neuronal rois % Description
+          RemovedROIs; % Axes handle for removed rois % Description
+          TracePlot; % Axes Handle for trace plots % Description
+          CellSelected; %Axes Handle for cell selected % Description
+          Neuropil_Close; %Axes Handle for neuropil close up % Description
+          UIAxes; % axes handlde for close-up % Description
+          StatDistribution; %Axes Handle for Stat Distribution % Description
+          LongitudinalNeurons % Axes Handle for long neurons Description
+          DroppedNeurons % AXes Handle for dropped neurons
+          MCMC_Axes_1 %Axes handle for mcmc 1
+          MCMC_Axes_3 %Axes Handle for mcmc 3
+          UIAxes2; %axes hanbdle ui axes 2 % Description
     end
     
 
@@ -251,14 +251,16 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
                 %Inspired Yuriy Shymkiv
                 f_DA_update_log(app, 'ROBO RAFA: You need to move to the Sweet Pea Viewer directory and reopen GUI!!!');
             end
+            
+            f_DA_S2P_componentGeneration(app);
 
             % Run constructor for some options
             f_DA_plotTraceStyles_constructor(app);
 
             % Communication readiness to user log interface
-            f_DA_update_log(app,'GUI Started');
-            f_DA_update_log(app, 'ROBO-RAFA: Welcome new user, you should join the Yuste lab, it is great, no?');
-            f_DA_update_log(app, 'Ready to Import Results and Imaging Data');
+            %f_DA_update_log(app,'GUI Started');
+            %f_DA_update_log(app, 'ROBO-RAFA: Welcome new user, you should join the Yuste lab, it is great, no?');
+            %f_DA_update_log(app, 'Ready to Import Results and Imaging Data');
         end
 
         % Button pushed function: BrowseCompiled
@@ -727,6 +729,26 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
         function EstimateButtonPushed(app, event)
             f_DA_estimateLowerBounds(app);
         end
+
+        % Key press function: UIFigure
+        function UIFigureKeyPress(app, event)
+            if strcmp(event.Key,'rightarrow')
+                app.SelectedCell.Value=app.SelectedCell.Value+1;
+            elseif strcmp(event.Key,'leftarrow')
+                app.SelectedCell.Value=app.SelectedCell.Value-1;
+            end
+            f_DA_changeCell(app);
+        end
+
+        % Callback function
+        function UIFigureKeyRelease(app, event)
+        
+        end
+
+        % Callback function
+        function UIFigureKeyRelease2(app, event)
+            
+        end
     end
 
     % Component initialization
@@ -740,6 +762,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.UIFigure.Position = [1 30 1920 1020];
             app.UIFigure.Name = 'MATLAB App';
             app.UIFigure.CloseRequestFcn = createCallbackFcn(app, @UIFigureCloseRequest, true);
+            app.UIFigure.KeyPressFcn = createCallbackFcn(app, @UIFigureKeyPress, true);
 
             % Create IOPanel
             app.IOPanel = uipanel(app.UIFigure);
@@ -787,7 +810,7 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.v086Label.FontSize = 24;
             app.v086Label.FontWeight = 'bold';
             app.v086Label.Position = [81 69 66 30];
-            app.v086Label.Text = 'v0.86';
+            app.v086Label.Text = 'v0.95';
 
             % Create LogTextArea
             app.LogTextArea = uitextarea(app.IOPanel);
@@ -1116,50 +1139,6 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.HiddenPanel.Visible = 'off';
             app.HiddenPanel.Position = [21 355 170 140];
 
-            % Create NeuronalROIs
-            app.NeuronalROIs = uiaxes(app.ROIsTab);
-            title(app.NeuronalROIs, 'Neuronal ROIs')
-            app.NeuronalROIs.DataAspectRatio = [1 1 1];
-            app.NeuronalROIs.PlotBoxAspectRatio = [1 1 1];
-            app.NeuronalROIs.FontName = 'Arial';
-            app.NeuronalROIs.XTick = [];
-            app.NeuronalROIs.YTick = [];
-            app.NeuronalROIs.FontSize = 16;
-            app.NeuronalROIs.Box = 'on';
-            app.NeuronalROIs.Position = [213 331 400 400];
-
-            % Create RemovedROIs
-            app.RemovedROIs = uiaxes(app.ROIsTab);
-            title(app.RemovedROIs, 'Removed ROIs')
-            app.RemovedROIs.DataAspectRatio = [1 1 1];
-            app.RemovedROIs.PlotBoxAspectRatio = [1 1 1];
-            app.RemovedROIs.FontName = 'Arial';
-            app.RemovedROIs.XTick = [];
-            app.RemovedROIs.YTick = [];
-            app.RemovedROIs.FontSize = 16;
-            app.RemovedROIs.Box = 'on';
-            app.RemovedROIs.Position = [628 331 400 400];
-
-            % Create CellSelected
-            app.CellSelected = uiaxes(app.ROIsTab);
-            title(app.CellSelected, 'Selected ROI')
-            app.CellSelected.DataAspectRatio = [1 1 1];
-            app.CellSelected.PlotBoxAspectRatio = [1 1 1];
-            app.CellSelected.FontName = 'Arial';
-            app.CellSelected.XTick = [];
-            app.CellSelected.YTick = [];
-            app.CellSelected.FontSize = 16;
-            app.CellSelected.Box = 'on';
-            app.CellSelected.Position = [1043 330 400 400];
-
-            % Create TracePlot
-            app.TracePlot = uiaxes(app.ROIsTab);
-            xlabel(app.TracePlot, 'Time (s)')
-            app.TracePlot.FontName = 'Arial';
-            app.TracePlot.FontWeight = 'bold';
-            app.TracePlot.FontSize = 16;
-            app.TracePlot.Position = [381 18 1060 307];
-
             % Create LongitudinalRegistrationTab
             app.LongitudinalRegistrationTab = uitab(app.TabGroup);
             app.LongitudinalRegistrationTab.AutoResizeChildren = 'off';
@@ -1262,30 +1241,6 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.MappingIndexSpinner.FontSize = 16;
             app.MappingIndexSpinner.Position = [770 258 100 22];
             app.MappingIndexSpinner.Value = 1;
-
-            % Create LongitudinalNeurons
-            app.LongitudinalNeurons = uiaxes(app.LongitudinalRegistrationTab);
-            title(app.LongitudinalNeurons, 'Longitudinal Neurons')
-            app.LongitudinalNeurons.DataAspectRatio = [1 1 1];
-            app.LongitudinalNeurons.PlotBoxAspectRatio = [1 1 1];
-            app.LongitudinalNeurons.FontName = 'Arial';
-            app.LongitudinalNeurons.XTick = [];
-            app.LongitudinalNeurons.YTick = [];
-            app.LongitudinalNeurons.FontSize = 16;
-            app.LongitudinalNeurons.Box = 'on';
-            app.LongitudinalNeurons.Position = [554 324 400 390];
-
-            % Create DroppedNeurons
-            app.DroppedNeurons = uiaxes(app.LongitudinalRegistrationTab);
-            title(app.DroppedNeurons, 'Dropped Neurons')
-            app.DroppedNeurons.DataAspectRatio = [1 1 1];
-            app.DroppedNeurons.PlotBoxAspectRatio = [1 1 1];
-            app.DroppedNeurons.FontName = 'Arial';
-            app.DroppedNeurons.XTick = [];
-            app.DroppedNeurons.YTick = [];
-            app.DroppedNeurons.FontSize = 16;
-            app.DroppedNeurons.Box = 'on';
-            app.DroppedNeurons.Position = [976 326 400 390];
 
             % Create Deconvolution
             app.Deconvolution = uitab(app.TabGroup);
@@ -1505,22 +1460,6 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.UPDATEPLOTSButton.Position = [30 50 389 175];
             app.UPDATEPLOTSButton.Text = 'UPDATE PLOTS';
 
-            % Create MCMC_Axes_1
-            app.MCMC_Axes_1 = uiaxes(app.Deconvolution);
-            xlabel(app.MCMC_Axes_1, 'Time (s)')
-            app.MCMC_Axes_1.FontName = 'Arial';
-            app.MCMC_Axes_1.FontWeight = 'bold';
-            app.MCMC_Axes_1.FontSize = 16;
-            app.MCMC_Axes_1.Position = [430 268 956 450];
-
-            % Create MCMC_Axes_3
-            app.MCMC_Axes_3 = uiaxes(app.Deconvolution);
-            xlabel(app.MCMC_Axes_3, 'Time (s)')
-            app.MCMC_Axes_3.FontName = 'Arial';
-            app.MCMC_Axes_3.FontWeight = 'bold';
-            app.MCMC_Axes_3.FontSize = 16;
-            app.MCMC_Axes_3.Position = [430 16 956 225];
-
             % Create Preprocessing
             app.Preprocessing = uitab(app.TabGroup);
             app.Preprocessing.AutoResizeChildren = 'off';
@@ -1730,14 +1669,6 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.HyperactiveThresholdEditField.ValueDisplayFormat = '%11.4g Percent';
             app.HyperactiveThresholdEditField.ValueChangedFcn = createCallbackFcn(app, @HyperactiveThresholdEditFieldValueChanged, true);
             app.HyperactiveThresholdEditField.Position = [161 466 100 22];
-
-            % Create UIAxes2
-            app.UIAxes2 = uiaxes(app.Preprocessing);
-            title(app.UIAxes2, 'Title')
-            xlabel(app.UIAxes2, 'X')
-            ylabel(app.UIAxes2, 'Y')
-            zlabel(app.UIAxes2, 'Z')
-            app.UIAxes2.Position = [499 234 887 489];
 
             % Create VideoMask
             app.VideoMask = uitab(app.TabGroup);
@@ -2092,28 +2023,6 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.NoiseStd_EditField.FontSize = 14;
             app.NoiseStd_EditField.Position = [131 14 70 22];
 
-            % Create UIAxes
-            app.UIAxes = uiaxes(app.SelectedROIDetails);
-            title(app.UIAxes, 'Close-Up')
-            app.UIAxes.FontName = 'Arial';
-            app.UIAxes.FontWeight = 'bold';
-            app.UIAxes.XTick = [];
-            app.UIAxes.YTick = [];
-            app.UIAxes.FontSize = 14;
-            app.UIAxes.Box = 'on';
-            app.UIAxes.Position = [32 253 152 152];
-
-            % Create Neuropil_Close
-            app.Neuropil_Close = uiaxes(app.SelectedROIDetails);
-            title(app.Neuropil_Close, 'Neuropil')
-            app.Neuropil_Close.FontName = 'Arial';
-            app.Neuropil_Close.FontWeight = 'bold';
-            app.Neuropil_Close.XTick = [];
-            app.Neuropil_Close.YTick = [];
-            app.Neuropil_Close.FontSize = 14;
-            app.Neuropil_Close.Box = 'on';
-            app.Neuropil_Close.Position = [221 253 152 152];
-
             % Create Threshold
             app.Threshold = uitab(app.TabGroup2);
             app.Threshold.Title = 'Thresholding';
@@ -2192,13 +2101,6 @@ classdef Sweet_Pee_Viewer < matlab.apps.AppBase
             app.ThresholdTypeDropDown.FontSize = 16;
             app.ThresholdTypeDropDown.Position = [15 80 225 79];
             app.ThresholdTypeDropDown.Value = 'SNR';
-
-            % Create StatDistribution
-            app.StatDistribution = uiaxes(app.Threshold);
-            app.StatDistribution.FontName = 'Arial';
-            app.StatDistribution.FontSize = 12;
-            app.StatDistribution.Box = 'on';
-            app.StatDistribution.Position = [15 160 345 242];
 
             % Show the figure after all components are created
             app.UIFigure.Visible = 'on';
