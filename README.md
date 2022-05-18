@@ -1,6 +1,7 @@
-# Sweet Pee Viewer v0.86
+# Sweet Pee Viewer v0.95
 App for sorting, refining, deconvolving, and post-processing Suite2P & Fissa datasets
-Still in BETA
+
+Still in beta
 
 Inspired by Yuriy Shymkiv's [caiman sorter](https://github.com/shymkivy/caiman_sorter)      
 
@@ -21,6 +22,7 @@ Internal dependencies:
 04/08/2022 -> Added Import for Longitudinal Tracking (must already be registered on my multi-day alignment tool) (v0.85)      
 04/11/2022 -> Sped up deconvolution plotting      
 04/12/2022 -> Re-added mascot to encourage Ras to update to the latest version (v0.86)
+05/18/2022 -> Refactored the app to be much more snappy
 
 # Preview
 
@@ -37,7 +39,4 @@ Internal dependencies:
 * full parameter decon functionality      
 * tidy up / beautify the design (eventually---when I need to procrastinate)     
 * refactor the super ugly repeated code blocks / spaghetti 
-
-# Known Bug List      
-* Updates on some functions are pushed in bulk to logging console when the function is finished
 
