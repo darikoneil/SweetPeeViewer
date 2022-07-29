@@ -1,7 +1,7 @@
 # Sweet Pee Viewer v0.95
 App for sorting, refining, deconvolving, and post-processing Suite2P & Fissa datasets
 
-Still in beta
+Not finished & hastily coded. Unsure if will tidy up & finalize as I've moved my pipeline to python.
 
 Inspired by Yuriy Shymkiv's [caiman sorter](https://github.com/shymkivy/caiman_sorter)      
 
