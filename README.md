@@ -22,7 +22,7 @@ Internal dependencies:
 04/08/2022 -> Added Import for Longitudinal Tracking (must already be registered on my multi-day alignment tool) (v0.85)      
 04/11/2022 -> Sped up deconvolution plotting      
 04/12/2022 -> Re-added mascot to encourage Ras to update to the latest version (v0.86)
-05/18/2022 -> Refactored the app to be much more snappy
+05/18/2022 -> Refactored the app to be much more snappy     
 07/29/2022 -> is ded rip?
 
 # Preview
